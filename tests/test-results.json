@@ -1,0 +1,29 @@
+{
+  "passed": [
+    "HTTP 200 OK khi tải trang chủ",
+    "Page title chứa đúng tên Nguyễn Văn Ninh",
+    "Nền trang đúng mã màu kem ấm #FCF9F7",
+    "Ép Light Mode thành công khi hệ điều hành/trình duyệt bật Dark Mode",
+    "Section anchor #projects tồn tại trong DOM",
+    "Section anchor #experience tồn tại trong DOM",
+    "Section anchor #skills tồn tại trong DOM",
+    "Section anchor #about tồn tại trong DOM",
+    "Section anchor #contact tồn tại trong DOM",
+    "File CV PDF thực tế tải về thành công (HTTP 200, application/pdf)",
+    "Modal chi tiết dự án mở thành công và hiển thị dialog role",
+    "Phím Escape đóng modal thành công",
+    "Thông báo sao chép email phản hồi thành công trên giao diện",
+    "Mobile 390px hoàn toàn không bị tràn chiều ngang (no horizontal overflow)",
+    "Drawer menu mobile mở mượt mà và hiển thị đầy đủ các liên kết",
+    "Nút đóng menu mobile hoạt động chuẩn xác",
+    "Mobile nhỏ 360px không bị tràn chiều ngang",
+    "Không có bất kỳ lỗi console nào (0 errors)"
+  ],
+  "failed": [],
+  "screenshots": [
+    "E:\\portfolio\\tests\\screenshots\\desktop-modal-detail.png",
+    "E:\\portfolio\\tests\\screenshots\\desktop-fullpage-1440px.png",
+    "E:\\portfolio\\tests\\screenshots\\mobile-drawer-menu.png",
+    "E:\\portfolio\\tests\\screenshots\\mobile-fullpage-390px.png"
+  ]
+}

@@ -247,9 +247,9 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
             aria-hidden="true"
           />
 
-          {/* 6. CONTEXT-AWARE TERMINAL OVERLAY */}
+          {/* 6. CONTEXT-AWARE TERMINAL OVERLAY (Positioned over the 3D code screen, safely to the right of chibi's face) */}
           <div
-            className={`absolute top-[17%] right-[30%] pointer-events-none px-2.5 py-1.5 rounded-lg bg-white/95 backdrop-blur-md border border-[rgba(66,126,138,0.22)] shadow-md transition-all duration-300 max-w-[210px] z-10 ${
+            className={`absolute top-[18%] left-[56%] pointer-events-none px-2.5 py-1.5 rounded-lg bg-white/95 backdrop-blur-md border border-[rgba(66,126,138,0.22)] shadow-md transition-all duration-300 max-w-[175px] sm:max-w-[195px] z-10 ${
               focusMode || activeProject !== "none" ? "scale-105 opacity-100" : "opacity-90"
             }`}
           >
@@ -317,8 +317,8 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
             </div>
           )}
 
-          {/* 8. CONTEXT-AWARE TECH ORBIT BADGES */}
-          <div className="absolute top-[8%] left-[28%] flex items-center gap-1.5 z-20 pointer-events-none">
+          {/* 8. CONTEXT-AWARE TECH ORBIT BADGES (Floats cleanly above chibi hair) */}
+          <div className="absolute top-[5%] left-[20%] flex items-center gap-1.5 z-20 pointer-events-none">
             {getOrbitBadges().map((badge, idx) => (
               <span
                 key={badge}

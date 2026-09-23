@@ -246,6 +246,116 @@ body {
   animation: chatBubbleSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Organic Chibi Breathing */
+@keyframes chibiBreathing {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.008, 1.014) translateY(-1.5px);
+  }
+}
+
+.anim-chibi-breathe {
+  animation: chibiBreathing 3.8s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* Screen Typing Flicker */
+@keyframes screenTypingFlicker {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  18% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  32% {
+    opacity: 0.65;
+    transform: scale(0.97);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.04);
+  }
+  72% {
+    opacity: 0.68;
+    transform: scale(0.99);
+  }
+  86% {
+    opacity: 0.92;
+    transform: scale(1.03);
+  }
+}
+
+.anim-screen-typing {
+  animation: screenTypingFlicker 2.2s ease-in-out infinite;
+}
+
+/* Typing Sparks Floating from Keyboard */
+@keyframes typingSparkFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.4);
+  }
+  40% {
+    opacity: 0.9;
+    transform: translateY(-8px) translateX(3px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-18px) translateX(6px) scale(0.2);
+  }
+}
+
+.anim-typing-spark-1 {
+  animation: typingSparkFloat 1.8s ease-out infinite;
+}
+
+.anim-typing-spark-2 {
+  animation: typingSparkFloat 2.2s ease-out 0.6s infinite;
+}
+
+.anim-typing-spark-3 {
+  animation: typingSparkFloat 2.6s ease-out 1.2s infinite;
+}
+
+/* Smile Sparkle Accent */
+@keyframes smileSparklePulse {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.15) rotate(45deg);
+  }
+}
+
+.anim-sparkle {
+  animation: smileSparklePulse 1.8s ease-in-out infinite;
+}
+
+/* Waving Hand Gesture */
+@keyframes waveHandMotion {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20%, 60% {
+    transform: rotate(14deg);
+  }
+  40%, 80% {
+    transform: rotate(-10deg);
+  }
+}
+
+.anim-wave-hand {
+  display: inline-block;
+  transform-origin: 75% 75%;
+  animation: waveHandMotion 1.5s ease-in-out infinite;
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {

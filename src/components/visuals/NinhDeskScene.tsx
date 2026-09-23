@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { Lightbulb, X, MessageSquare } from "lucide-react";
 import { usePointerParallax } from "@/hooks/usePointerParallax";
@@ -33,20 +33,52 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
     closeSpeechBubble,
   } = usePortfolioInteraction();
 
-  // Scroll In-View detection to automatically show first speech bubble on scroll down
+  // Pose state: Greeting (waving hand + smiling looking at user) vs Coding (typing on laptop)
+  const [isGreeting, setIsGreeting] = useState(true);
+  const greetingTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const startGreetingPose = useCallback((durationMs = 4200) => {
+    setIsGreeting(true);
+    if (greetingTimerRef.current) {
+      clearTimeout(greetingTimerRef.current);
+    }
+    greetingTimerRef.current = setTimeout(() => {
+      setIsGreeting(false);
+    }, durationMs);
+  }, []);
+
+  // Scroll In-View detection to automatically show greeting pose + speech bubble on scroll down
   const { ref: inViewRef, isInView } = useSectionInView<HTMLDivElement>({ threshold: 0.15 });
   const hasAutoOpenedRef = useRef(false);
 
   useEffect(() => {
     if (isInView && !hasAutoOpenedRef.current) {
       hasAutoOpenedRef.current = true;
+      startGreetingPose(4200);
       // Auto pop up the first speech bubble after smooth entrance
       const timer = setTimeout(() => {
         openFirstSpeechBubble();
-      }, 600);
+      }, 500);
       return () => clearTimeout(timer);
     }
-  }, [isInView, openFirstSpeechBubble]);
+  }, [isInView, openFirstSpeechBubble, startGreetingPose]);
+
+  useEffect(() => {
+    return () => {
+      if (greetingTimerRef.current) {
+        clearTimeout(greetingTimerRef.current);
+      }
+    };
+  }, []);
+
+  // When user clicks the character: wave hello again for 3.5s & advance speech bubble
+  const handleCharacterClick = () => {
+    startGreetingPose(3500);
+    triggerNextSpeechBubble();
+  };
+
+  // If user is actively previewing a project card, immediately switch to coding mode
+  const showGreeting = isGreeting && activeProject === "none";
 
   // Fine-tuned 3D Parallax Tilt (max RotateX ±2°, RotateY ±3°)
   const { tiltX, tiltY, translateX, translateY } = usePointerParallax({
@@ -147,33 +179,89 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
           aria-hidden="true"
         />
 
-        {/* 3. VISUAL ASSET LAYER */}
-        <div className="relative aspect-[4/3] w-full overflow-visible rounded-2xl">
-          {/* Clickable & Hoverable Chibi Character Target: Hover changes color (Focus Mode), Click triggers/advances speech bubble */}
+        {/* 3. VISUAL ASSET LAYER (With organic breathing animation) */}
+        <div
+          className={`relative aspect-[4/3] w-full overflow-visible rounded-2xl ${
+            prefersReduced ? "" : "anim-chibi-breathe"
+          }`}
+        >
+          {/* Clickable & Hoverable Chibi Character Target: Hover changes color (Focus Mode), Click triggers/advances speech bubble & waves hello */}
           <button
-            onClick={triggerNextSpeechBubble}
+            onClick={handleCharacterClick}
             onMouseEnter={() => setFocusMode(true)}
             onMouseLeave={() => setFocusMode(false)}
             onFocus={() => setFocusMode(true)}
             onBlur={() => setFocusMode(false)}
-            aria-label="Nhân vật Ninh: Rê chuột để đổi màu/bật Focus Mode, Bấm để xem lời nhắn tiếp theo"
-            className="absolute top-[18%] left-[34%] w-[32%] h-[56%] z-20 cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#176B87] group/char"
-            title="Rê chuột để đổi màu Focus Mode, bấm để xem lời chào từ Ninh"
+            aria-label="Nhân vật Ninh: Rê chuột để đổi màu/bật Focus Mode, Bấm để vẫy tay chào và trò chuyện"
+            className="absolute top-[14%] left-[28%] w-[38%] h-[60%] z-20 cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#176B87] group/char"
+            title="Bấm để Ninh vẫy tay chào & xem lời nhắn"
           >
             <span className="sr-only">Rê chuột đổi màu đèn/Focus Mode, bấm để trò chuyện</span>
           </button>
 
+          {/* 3.1 GREETING POSE: Waving hand, fluffy hair, warm bright smile looking at viewer */}
           <Image
-            src="/visuals/ninh-desk.png"
-            alt="Nguyễn Văn Ninh Developer Desk 3D Chibi Workspace"
+            src="/visuals/ninh-desk-wave.png"
+            alt="Nguyễn Văn Ninh vẫy tay chào và cười thân thiện với mái tóc bồng bềnh"
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 560px, 620px"
             priority
-            className={`object-contain pointer-events-none transition-all duration-500 ${
+            className={`object-contain pointer-events-none transition-opacity duration-700 ease-in-out ${
+              showGreeting ? "opacity-100 z-1" : "opacity-0 pointer-events-none"
+            } ${
               focusMode
                 ? "drop-shadow-[0_16px_36px_rgba(245,158,11,0.35)] brightness-[1.04]"
                 : "drop-shadow-[0_12px_28px_rgba(24,59,78,0.08)]"
             }`}
+          />
+
+          {/* 3.2 FOCUS CODING POSE: Hands on laptop keyboard, focusing on work */}
+          <Image
+            src="/visuals/ninh-desk.png"
+            alt="Nguyễn Văn Ninh tập trung gõ code tại bàn làm việc"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 560px, 620px"
+            priority
+            className={`object-contain pointer-events-none transition-opacity duration-700 ease-in-out ${
+              !showGreeting ? "opacity-100 z-1" : "opacity-0 pointer-events-none"
+            } ${
+              focusMode
+                ? "drop-shadow-[0_16px_36px_rgba(245,158,11,0.35)] brightness-[1.04]"
+                : "drop-shadow-[0_12px_28px_rgba(24,59,78,0.08)]"
+            }`}
+          />
+
+          {/* SMILE SPARKLES ACCENT: Radiant warm smile when greeting */}
+          {showGreeting && !prefersReduced && (
+            <div className="absolute top-[17%] left-[45%] pointer-events-none z-20 select-none" aria-hidden="true">
+              <span className="absolute -top-1 -right-4 text-[13px] anim-sparkle text-amber-400">✨</span>
+              <span className="absolute top-5 -left-3 text-[11px] anim-sparkle text-sky-400" style={{ animationDelay: "0.6s" }}>✨</span>
+            </div>
+          )}
+
+          {/* WAVING HAND MINI BADGE: Highlights the waving hand hello gesture */}
+          {showGreeting && (
+            <div className="absolute top-[11%] left-[22%] pointer-events-none z-20 animate-[heroFadeUp_0.4s_ease-out]">
+              <span className="px-2 py-0.5 rounded-full text-[9.5px] font-medium bg-white/95 text-[#183B4E] border border-[rgba(23,107,135,0.22)] shadow-xs flex items-center gap-1">
+                <span className="anim-wave-hand text-xs">👋</span>
+                <span>Xin chào!</span>
+              </span>
+            </div>
+          )}
+
+          {/* DYNAMIC LIGHT REFLECTION ONTO CHARACTER: Bounces screen/ambient glow onto chest & face */}
+          <div
+            className="absolute top-[20%] left-[36%] w-28 h-28 rounded-full pointer-events-none transition-all duration-700 mix-blend-soft-light z-15"
+            style={{
+              background: focusMode
+                ? "radial-gradient(circle, rgba(251, 191, 36, 0.65) 0%, transparent 70%)"
+                : activeProject === "chess"
+                ? "radial-gradient(circle, rgba(192, 132, 252, 0.55) 0%, transparent 70%)"
+                : activeProject === "green-sm"
+                ? "radial-gradient(circle, rgba(74, 222, 128, 0.55) 0%, transparent 70%)"
+                : "radial-gradient(circle, rgba(165, 243, 252, 0.5) 0%, transparent 70%)",
+            }}
+            aria-hidden="true"
           />
 
           {/* 4. INTERACTIVE DESK LAMP: Hover triggers color change / Focus Mode */}
@@ -230,10 +318,10 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
             aria-hidden="true"
           />
 
-          {/* 5. LAPTOP SCREEN GLOW (Reacts to projects & hover) */}
+          {/* 5. LAPTOP SCREEN GLOW & SCREEN TYPING FLICKER (Reacts to projects & hover) */}
           <div
             className={`absolute top-[37%] left-[49%] w-28 h-24 rounded-full pointer-events-none transition-all duration-500 ${
-              prefersReduced ? "opacity-50" : "anim-laptop-glow"
+              prefersReduced ? "opacity-50" : !showGreeting ? "anim-screen-typing" : "anim-laptop-glow"
             } ${isExploreHovered || focusMode ? "scale-125 opacity-100" : ""}`}
             style={{
               background: focusMode
@@ -246,6 +334,15 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
             }}
             aria-hidden="true"
           />
+
+          {/* TYPING CODE SPARKS: Tiny photon sparks floating up from keyboard in coding mode */}
+          {!showGreeting && !prefersReduced && (
+            <div className="absolute top-[38%] left-[53%] w-10 h-8 pointer-events-none z-15 overflow-visible" aria-hidden="true">
+              <span className="absolute top-2 left-1 w-1.5 h-1.5 rounded-full bg-[#A9D8F2] blur-[0.3px] anim-typing-spark-1" />
+              <span className="absolute top-1 left-4 w-1 h-1 rounded-full bg-[#D7EAF0] blur-[0.2px] anim-typing-spark-2" />
+              <span className="absolute top-3 left-7 w-1.5 h-1.5 rounded-full bg-[#FEF08A] blur-[0.3px] anim-typing-spark-3" />
+            </div>
+          )}
 
           {/* 6. CONTEXT-AWARE TERMINAL OVERLAY (Positioned over the 3D code screen, safely to the right of chibi's face) */}
           <div
@@ -346,7 +443,7 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
               <div className="flex-1">
                 <span className="leading-snug block font-medium">{speechBubble.message}</span>
                 <span className="text-[9px] text-[#526779] block mt-0.5">
-                  Bấm nhân vật để xem tiếp ({speechBubble.step + 1}/4)
+                  Bấm nhân vật để vẫy chào & xem tiếp ({speechBubble.step + 1}/4)
                 </span>
               </div>
               <button

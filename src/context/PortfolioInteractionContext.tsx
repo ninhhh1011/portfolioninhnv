@@ -11,7 +11,7 @@ export interface SpeechBubbleState {
 }
 
 const EASTER_EGG_MESSAGES = [
-  "Chào bạn, mình là Ninh.",
+  "Chào bạn, mình là Ninh! Rất vui được gặp bạn.",
   "Rê chuột vào bàn làm việc hoặc chiếc đèn để đổi màu Focus Mode nhé.",
   "Thử khám phá các dự án bên phải nhé.",
   "Green SM là phần backend mình đầu tư nhiều công sức nhất.",

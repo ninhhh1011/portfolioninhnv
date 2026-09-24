@@ -83,7 +83,7 @@ export const ThreeDeskCanvas: React.FC<ThreeDeskCanvasProps> = ({
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.15;
     container.appendChild(renderer.domElement);
@@ -657,13 +657,15 @@ export const ThreeDeskCanvas: React.FC<ThreeDeskCanvasProps> = ({
 
     // 15. ANIMATION LOOP (60fps render loop)
     let animationFrameId: number;
-    let clock = new THREE.Clock();
+    let lastTime = performance.now();
+    const startTime = performance.now();
 
-    const animate = () => {
+    const animate = (now: number) => {
       animationFrameId = requestAnimationFrame(animate);
 
-      const delta = clock.getDelta();
-      const elapsedTime = clock.getElapsedTime();
+      const delta = Math.min((now - lastTime) / 1000, 0.1);
+      lastTime = now;
+      const elapsedTime = (now - startTime) / 1000;
 
       // Update OrbitControls
       controls.update();
@@ -724,7 +726,7 @@ export const ThreeDeskCanvas: React.FC<ThreeDeskCanvasProps> = ({
       renderer.render(scene, camera);
     };
 
-    animate();
+    animate(performance.now());
     setIsLoaded(true);
 
     // 16. RESIZE HANDLER

@@ -2,25 +2,11 @@
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
-import dynamic from "next/dynamic";
-import { Lightbulb, X, MessageSquare, Box, Sparkles } from "lucide-react";
+import { Lightbulb, X, MessageSquare } from "lucide-react";
 import { usePointerParallax } from "@/hooks/usePointerParallax";
 import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
 import { useSectionInView } from "@/hooks/useSectionInView";
 import { usePortfolioInteraction } from "@/context/PortfolioInteractionContext";
-
-const ThreeDeskCanvas = dynamic(
-  () => import("./ThreeDeskCanvas").then((mod) => mod.ThreeDeskCanvas),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="w-full aspect-[4/3] rounded-2xl bg-white/60 backdrop-blur-md flex flex-col items-center justify-center border border-[rgba(23,107,135,0.14)] gap-3 shadow-xs">
-        <div className="w-7 h-7 rounded-full border-2 border-[#176B87] border-t-transparent animate-spin" />
-        <span className="text-xs text-[#183B4E] font-mono">Đang tải không gian 3D WebGL...</span>
-      </div>
-    ),
-  }
-);
 
 export interface NinhDeskSceneProps {
   isExploreHovered?: boolean;
@@ -46,9 +32,6 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
     openFirstSpeechBubble,
     closeSpeechBubble,
   } = usePortfolioInteraction();
-
-  // View mode: '3d' (Real 3D WebGL Three.js interactive canvas) vs 'chibi' (2D illustration)
-  const [viewMode, setViewMode] = useState<"3d" | "chibi">("3d");
 
   // Pose state: Greeting (waving hand + smiling looking at user) vs Coding (typing on laptop)
   const [isGreeting, setIsGreeting] = useState(true);
@@ -130,96 +113,11 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
       {/* Target for InView observer */}
       <div ref={inViewRef} className="absolute -top-16 inset-x-0 h-8 pointer-events-none" />
 
-      {/* 0. Mode Switcher: 3D WebGL vs Chibi Illustration */}
-      <div className="flex items-center justify-center mb-14 relative z-30">
-        <div className="inline-flex items-center p-1 rounded-full bg-white/90 backdrop-blur-md border border-[rgba(23,107,135,0.18)] shadow-xs">
-          <button
-            onClick={() => setViewMode("3d")}
-            className={`px-3 py-1 rounded-full text-[11px] font-mono font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
-              viewMode === "3d"
-                ? "bg-[#176B87] text-white shadow-xs"
-                : "text-[#526779] hover:text-[#183B4E]"
-            }`}
-          >
-            <Box className="w-3.5 h-3.5" />
-            <span>3D WebGL (Xoay 360°)</span>
-          </button>
-          <button
-            onClick={() => setViewMode("chibi")}
-            className={`px-3 py-1 rounded-full text-[11px] font-mono font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
-              viewMode === "chibi"
-                ? "bg-[#176B87] text-white shadow-xs"
-                : "text-[#526779] hover:text-[#183B4E]"
-            }`}
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Chibi 2D</span>
-          </button>
-        </div>
-      </div>
-
-      {viewMode === "3d" ? (
-        <div className="relative w-full">
-          <ThreeDeskCanvas isExploreHovered={isExploreHovered} />
-
-          {/* Speech bubble overlay for 3D view */}
-          {speechBubble.isOpen && (
-            <div
-              key={speechBubble.step}
-              role="alert"
-              className="absolute -top-14 left-1/2 -translate-x-1/2 z-30 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-[rgba(23,107,135,0.25)] shadow-[0_12px_28px_rgba(24,59,78,0.14)] max-w-[310px] w-max text-xs text-[#183B4E] flex items-center gap-2.5 anim-chat-slide-up"
-            >
-              <div className="w-5 h-5 rounded-full bg-[#D7EAF0] flex items-center justify-center shrink-0 text-[#176B87]">
-                <MessageSquare className="w-3 h-3" />
-              </div>
-              <div className="flex-1">
-                <span className="leading-snug block font-medium">{speechBubble.message}</span>
-                <span className="text-[9px] text-[#526779] block mt-0.5">
-                  Bấm bàn làm việc để xem tiếp ({speechBubble.step + 1}/4)
-                </span>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  closeSpeechBubble();
-                }}
-                aria-label="Đóng tin nhắn"
-                className="p-1 hover:bg-[#F3F1EE] rounded-full text-[#526779] hover:text-[#183B4E] transition-colors cursor-pointer shrink-0"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-              <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white/95 border-b border-r border-[rgba(23,107,135,0.25)] rotate-45 pointer-events-none" />
-            </div>
-          )}
-
-          {/* Status Badge Below 3D Island */}
-          <div className="text-center mt-3 flex items-center justify-center gap-2">
-            <button
-              onClick={toggleFocusMode}
-              className="inline-flex items-center gap-1.5 text-[11px] font-medium text-[#526779] bg-white/90 backdrop-blur-sm border border-[rgba(66,126,138,0.18)] px-3.5 py-1 rounded-full shadow-xs cursor-pointer hover:border-[#F59E0B]/50 transition-colors"
-            >
-              <span
-                className={`w-1.5 h-1.5 rounded-full ${
-                  focusMode ? "bg-[#D97706] animate-ping" : "bg-[#176B87]"
-                }`}
-              />
-              {focusMode ? (
-                <span className="text-[#B45309] font-semibold flex items-center gap-1">
-                  <Lightbulb className="w-3 h-3" /> Focus Mode · Đang chiếu sáng ấm
-                </span>
-              ) : (
-                <span>Bấm để Bật/Tắt Focus Mode · Đèn đổi màu thời gian thực</span>
-              )}
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="relative w-full">
-          {/* 1. Ambient Depth Layers Around Workspace (Perspective lines & clouds) */}
-          <div
-            className="absolute -inset-8 pointer-events-none -z-20 overflow-hidden"
-            aria-hidden="true"
-          >
+      {/* 1. Ambient Depth Layers Around Workspace (Perspective lines & clouds) */}
+      <div
+        className="absolute -inset-8 pointer-events-none -z-20 overflow-hidden"
+        aria-hidden="true"
+      >
         {/* Subtle technical perspective grid lines */}
         <div
           className="absolute inset-0 opacity-[0.035]"
@@ -607,8 +505,6 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
           </span>
         </div>
       </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -194,7 +194,6 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
             onBlur={() => setFocusMode(false)}
             aria-label="Nhân vật Ninh: Rê chuột để đổi màu/bật Focus Mode, Bấm để vẫy tay chào và trò chuyện"
             className="absolute top-[14%] left-[28%] w-[38%] h-[60%] z-20 cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#176B87] group/char"
-            title="Bấm để Ninh vẫy tay chào & xem lời nhắn"
           >
             <span className="sr-only">Rê chuột đổi màu đèn/Focus Mode, bấm để trò chuyện</span>
           </button>
@@ -281,7 +280,6 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
             role="switch"
             aria-checked={focusMode}
             className="absolute top-[20%] right-[18%] w-16 h-20 z-20 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#176B87] group/lamp transition-transform hover:scale-110 active:scale-95"
-            title="Rê chuột hoặc bấm để đổi màu đèn Focus Mode"
           >
             <span className="sr-only">Rê chuột hoặc bấm để đổi màu đèn Focus Mode</span>
           </button>

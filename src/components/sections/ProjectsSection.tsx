@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ExternalLink, Info } from "lucide-react";
+import { ExternalLink, Info, Lock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Chip } from "@/components/ui/Chip";
 import { Button } from "@/components/ui/Button";
@@ -110,39 +110,64 @@ export const ProjectsSection: React.FC = () => {
 
                         {/* Actions */}
                         <div className="flex flex-wrap items-center gap-3 pt-2">
-                          <Button
-                            variant="primary"
-                            size="md"
-                            href={project.demoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="gap-2 group/btn"
-                          >
-                            <ExternalLink className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-                            <span>Mở Demo</span>
-                          </Button>
+                          {project.isProprietary ? (
+                            <>
+                              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-[#F3F1EE] text-[#526779] border border-[rgba(66,126,138,0.2)] shadow-2xs">
+                                <Lock className="w-3.5 h-3.5 text-[#176B87]" />
+                                <span>Dự án nội bộ · Bản quyền VinUni</span>
+                              </div>
 
-                          <Button
-                            variant="secondary"
-                            size="md"
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="gap-2"
-                          >
-                            <GithubIcon className="w-4 h-4" />
-                            <span>Mã nguồn</span>
-                          </Button>
+                              <ProjectModal
+                                project={project}
+                                trigger={
+                                  <Button variant="primary" size="md" className="gap-2">
+                                    <Info className="w-4 h-4" />
+                                    <span>Xem chi tiết & Luồng kỹ thuật</span>
+                                  </Button>
+                                }
+                              />
+                            </>
+                          ) : (
+                            <>
+                              {project.demoUrl && (
+                                <Button
+                                  variant="primary"
+                                  size="md"
+                                  href={project.demoUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="gap-2 group/btn"
+                                >
+                                  <ExternalLink className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                                  <span>Mở Demo</span>
+                                </Button>
+                              )}
 
-                          <ProjectModal
-                            project={project}
-                            trigger={
-                              <Button variant="outline" size="md" className="gap-1.5">
-                                <Info className="w-4 h-4 text-[#176B87]" />
-                                <span>Chi tiết</span>
-                              </Button>
-                            }
-                          />
+                              {project.githubUrl && (
+                                <Button
+                                  variant="secondary"
+                                  size="md"
+                                  href={project.githubUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="gap-2"
+                                >
+                                  <GithubIcon className="w-4 h-4" />
+                                  <span>Mã nguồn</span>
+                                </Button>
+                              )}
+
+                              <ProjectModal
+                                project={project}
+                                trigger={
+                                  <Button variant="outline" size="md" className="gap-1.5">
+                                    <Info className="w-4 h-4 text-[#176B87]" />
+                                    <span>Chi tiết</span>
+                                  </Button>
+                                }
+                              />
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>

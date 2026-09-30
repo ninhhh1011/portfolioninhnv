@@ -204,6 +204,11 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
                       <span className="text-[10px] text-[#176B87] bg-[#D7EAF0]/60 px-1.5 py-0.5 rounded">
                         {proj.subtitle}
                       </span>
+                      {proj.isProprietary && (
+                        <span className="text-[9.5px] text-[#526779] bg-gray-100 px-1.5 py-0.5 rounded font-mono">
+                          Mã nguồn nội bộ
+                        </span>
+                      )}
                     </div>
                     <span className="text-[#526779] font-mono">{proj.year}</span>
                   </div>

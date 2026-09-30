@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Modal } from "@heroui/react";
-import { X, ExternalLink } from "lucide-react";
+import { X, ExternalLink, Lock } from "lucide-react";
 import { GithubIcon } from "./Icons";
 import { ProjectItem } from "@/content/portfolio";
 import { Chip } from "./Chip";
@@ -79,31 +79,50 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, trigger }) 
               </div>
             </Modal.Body>
 
-            <Modal.Footer className="pt-4 border-t border-[rgba(66,126,138,0.12)] flex items-center justify-end gap-3">
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="primary"
-                  size="sm"
-                  href={project.demoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="gap-1.5"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  Mở Demo
-                </Button>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="gap-1.5"
-                >
-                  <GithubIcon className="w-3.5 h-3.5" />
-                  Mã nguồn
-                </Button>
-              </div>
+            <Modal.Footer className="pt-4 border-t border-[rgba(66,126,138,0.12)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              {project.isProprietary ? (
+                <>
+                  <div className="flex items-center gap-2 text-xs text-[#526779]">
+                    <Lock className="w-4 h-4 text-[#176B87] shrink-0" />
+                    <span>
+                      {project.proprietaryNotice ||
+                        "Mã nguồn và hệ thống thuộc quyền sở hữu trí tuệ của VinUni theo quy định bảo mật."}
+                    </span>
+                  </div>
+                  <Modal.CloseTrigger className="px-4 py-1.5 rounded-full text-xs font-medium bg-[#F3F1EE] text-[#183B4E] hover:bg-[#D7EAF0]/50 transition-colors cursor-pointer border border-[rgba(66,126,138,0.2)]">
+                    Đóng
+                  </Modal.CloseTrigger>
+                </>
+              ) : (
+                <div className="flex items-center justify-end gap-2 w-full">
+                  {project.demoUrl && (
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      href={project.demoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="gap-1.5"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      Mở Demo
+                    </Button>
+                  )}
+                  {project.githubUrl && (
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="gap-1.5"
+                    >
+                      <GithubIcon className="w-3.5 h-3.5" />
+                      Mã nguồn
+                    </Button>
+                  )}
+                </div>
+              )}
             </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>

@@ -41,9 +41,11 @@ export interface ProjectItem {
   description: string;
   bullets: string[];
   technologies: string[];
-  demoUrl: string;
-  githubUrl: string;
+  demoUrl?: string;
+  githubUrl?: string;
   previewType: "smart-parking" | "chess";
+  isProprietary?: boolean;
+  proprietaryNotice?: string;
 }
 
 export interface SkillCategory {
@@ -153,9 +155,10 @@ export const portfolioData: {
         "Tích hợp API backend; chuẩn hóa component, responsive, đa ngôn ngữ VI/EN và các trạng thái loading/empty/error.",
       ],
       technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "next-intl", "Vercel"],
-      demoUrl: "https://smart-parking-coral.vercel.app/",
-      githubUrl: "https://github.com/ninhhh1011/P-062",
       previewType: "smart-parking",
+      isProprietary: true,
+      proprietaryNotice:
+        "Mã nguồn và hệ thống thuộc quyền sở hữu trí tuệ của VinUni. Bản demo và repo được bảo mật theo quy định nội bộ.",
     },
     {
       id: "chess-web-app",

@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { HeroComposition } from "@/components/visuals/HeroComposition";
 import { TerminalCodeBackdrop } from "@/components/visuals/TerminalCodeBackdrop";
+import { CvModal } from "@/components/ui/CvModal";
 import { portfolioData } from "@/content/portfolio";
 
 export const HeroSection: React.FC = () => {
   const { profile } = portfolioData;
   const [isExploreHovered, setIsExploreHovered] = React.useState(false);
   const [isContactHovered, setIsContactHovered] = React.useState(false);
+  const [isCvOpen, setIsCvOpen] = React.useState(false);
 
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -94,14 +96,12 @@ export const HeroSection: React.FC = () => {
           <Button
             variant="secondary"
             size="lg"
-            href={profile.cvPath}
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={() => setIsCvOpen(true)}
             onMouseEnter={() => setIsContactHovered(true)}
             onMouseLeave={() => setIsContactHovered(false)}
             onFocus={() => setIsContactHovered(true)}
             onBlur={() => setIsContactHovered(false)}
-            className="gap-2"
+            className="gap-2 cursor-pointer"
           >
             <FileText className="w-4 h-4 text-[#176B87]" />
             <span>Xem CV</span>
@@ -116,6 +116,9 @@ export const HeroSection: React.FC = () => {
           isContactHovered={isContactHovered}
         />
       </div>
+
+      {/* Quick-view CV Harvard 1-Page Modal */}
+      <CvModal isOpen={isCvOpen} onClose={() => setIsCvOpen(false)} />
     </section>
   );
 };

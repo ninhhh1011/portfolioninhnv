@@ -11,6 +11,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   href?: string;
   target?: string;
   rel?: string;
+  download?: string;
   children: React.ReactNode;
   className?: string;
 }
@@ -21,6 +22,7 @@ export const Button: React.FC<ButtonProps> = ({
   href,
   target,
   rel,
+  download,
   children,
   className,
   ...props
@@ -49,7 +51,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   if (href) {
     return (
-      <a href={href} target={target} rel={rel} className={combinedClass}>
+      <a href={href} target={target} rel={rel} download={download} className={combinedClass}>
         {children}
       </a>
     );

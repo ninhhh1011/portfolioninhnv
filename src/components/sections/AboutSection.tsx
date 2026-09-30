@@ -24,9 +24,7 @@ export const AboutSection: React.FC = () => {
   };
 
   return (
-    <section id="about" className="py-20 md:py-28 px-4 max-w-5xl mx-auto relative">
-      {/* Anchor alias for #gioi-thieu */}
-      <div id="gioi-thieu" className="absolute -top-24 pointer-events-none" />
+    <section id="about" className="py-20 md:py-28 px-4 max-w-5xl mx-auto">
       {/* Editorial layout: 2 columns with generous whitespace */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
         {/* Left Column: Narrative voice (5 cols) */}
@@ -85,7 +83,7 @@ export const AboutSection: React.FC = () => {
 
           <div className="space-y-4">
             {education.map((item: EducationItem, idx: number) => (
-              <SectionReveal key={item.institution} direction="up" delayMs={idx * 100}>
+              <SectionReveal key={item.institution} direction="left" delayMs={100 + idx * 100}>
                 <SpotlightSurface variant="subtle" className="rounded-2xl">
                   <div className="bg-white rounded-2xl p-5 md:p-6 border border-[rgba(66,126,138,0.14)] shadow-xs hover:border-[rgba(66,126,138,0.3)] hover:shadow-md transition-all duration-300 hover:-translate-y-1 flex items-start gap-4">
                     <div className="w-10 h-10 rounded-xl bg-[#D7EAF0]/60 flex items-center justify-center shrink-0 mt-0.5 text-[#176B87] shadow-2xs">

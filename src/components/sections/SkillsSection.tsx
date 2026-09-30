@@ -36,8 +36,6 @@ export const SkillsSection: React.FC = () => {
 
   return (
     <section id="skills" className="relative py-20 md:py-28 px-4 max-w-6xl mx-auto overflow-hidden">
-      {/* Anchor alias for #nang-luc */}
-      <div id="nang-luc" className="absolute -top-24 pointer-events-none" />
       {/* Decorative Technical Ambience Grid (Subtle low-opacity geometry) */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.035] -z-10"
@@ -68,7 +66,7 @@ export const SkillsSection: React.FC = () => {
       {/* 3 Interactive Capability Field Panels */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
         {skillCategories.map((cat: SkillCategory, index: number) => (
-          <SectionReveal key={cat.title} direction="up" delayMs={index * 100}>
+          <SectionReveal key={cat.title} direction="up" delayMs={index * 120}>
             <SpotlightSurface
               variant={getSpotlightVariant(index)}
               className="rounded-3xl h-full"

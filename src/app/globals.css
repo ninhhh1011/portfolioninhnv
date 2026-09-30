@@ -379,16 +379,7 @@ body {
   .anim-steam-2,
   .anim-cursor,
   .anim-drift-slow,
-  .anim-drift-reverse,
-  .anim-chibi-breathe,
-  .anim-screen-typing,
-  .anim-typing-spark-1,
-  .anim-typing-spark-2,
-  .anim-typing-spark-3,
-  .anim-sparkle,
-  .anim-wave-hand,
-  .animate-ping,
-  .animate-pulse {
+  .anim-drift-reverse {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;

@@ -151,12 +151,13 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
           transformStyle: "preserve-3d",
         }}
       >
-        {/* Soft atmospheric base drop shadow */}
+        {/* Soft atmospheric base drop shadow & Ground Shadow */}
         <div
-          className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-4/5 h-20 bg-[#183B4E]/12 rounded-full blur-2xl pointer-events-none transition-all duration-500"
+          className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[88%] h-24 rounded-[100%] pointer-events-none transition-all duration-500 z-0"
           style={{
-            transform: isExploreHovered || focusMode ? "scale(1.1) translateY(4px)" : "scale(1)",
-            opacity: focusMode ? 0.26 : 0.14,
+            background: "radial-gradient(ellipse at center, rgba(24, 59, 78, 0.18) 0%, transparent 70%)",
+            transform: isExploreHovered || focusMode ? "scale(1.08) translateY(2px)" : "scale(1)",
+            opacity: focusMode ? 0.95 : 0.85,
           }}
           aria-hidden="true"
         />
@@ -303,15 +304,30 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
             aria-hidden="true"
           />
 
-          {/* DOWNWARD DESK LIGHT CONE (Appears brightly on hover to illuminate workspace) */}
+          {/* DOWNWARD DESK LIGHT CONE & AMBIENT LAMP GLOW SPILLED ONTO DESK AND KEYBOARD */}
           <div
             className={`absolute top-[30%] right-[14%] w-48 h-52 pointer-events-none transition-all duration-500 -z-0 ${
-              focusMode ? "opacity-85 scale-100" : "opacity-0 scale-90"
+              focusMode ? "opacity-90 scale-100" : "opacity-0 scale-90"
             }`}
             style={{
               background:
-                "conic-gradient(from 135deg at 55% 0%, rgba(254, 240, 138, 0.45) 0deg, rgba(254, 215, 170, 0.35) 45deg, transparent 80deg)",
+                "conic-gradient(from 135deg at 55% 0%, rgba(254, 240, 138, 0.5) 0deg, rgba(254, 215, 170, 0.35) 45deg, transparent 80deg)",
               filter: "blur(6px)",
+            }}
+            aria-hidden="true"
+          />
+
+          {/* AMBIENT LAMP GLOW (Spills soft radial warmth onto desk surface & keyboard on hover) */}
+          <div
+            className={`absolute top-[42%] right-[12%] w-[60%] h-[38%] rounded-[50%] pointer-events-none z-15 ${
+              focusMode ? "opacity-100 scale-105" : "opacity-25 scale-95"
+            }`}
+            style={{
+              background: focusMode
+                ? "radial-gradient(ellipse at 65% 30%, rgba(254, 240, 138, 0.42) 0%, rgba(251, 191, 36, 0.22) 45%, transparent 75%)"
+                : "radial-gradient(ellipse at 65% 30%, rgba(254, 240, 138, 0.1) 0%, transparent 60%)",
+              transition: "background 0.4s ease, opacity 0.4s ease, transform 0.4s ease",
+              filter: "blur(10px)",
             }}
             aria-hidden="true"
           />

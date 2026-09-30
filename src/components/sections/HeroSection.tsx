@@ -1,17 +1,20 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { ArrowDown, FileText } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { HeroComposition } from "@/components/visuals/HeroComposition";
 import { TerminalCodeBackdrop } from "@/components/visuals/TerminalCodeBackdrop";
+import { FloatingTerminalWidget } from "@/components/visuals/FloatingTerminalWidget";
+import { CvModal } from "@/components/ui/CvModal";
 import { portfolioData } from "@/content/portfolio";
 
 export const HeroSection: React.FC = () => {
   const { profile } = portfolioData;
-  const [isExploreHovered, setIsExploreHovered] = React.useState(false);
-  const [isContactHovered, setIsContactHovered] = React.useState(false);
+  const [isExploreHovered, setIsExploreHovered] = useState(false);
+  const [isContactHovered, setIsContactHovered] = useState(false);
+  const [isCvOpen, setIsCvOpen] = useState(false);
 
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -21,8 +24,8 @@ export const HeroSection: React.FC = () => {
 
   return (
     <section className="relative pt-20 sm:pt-24 md:pt-28 pb-12 md:pb-16 px-4 overflow-hidden isolate">
-      {/* 1. Terminal / Code Backdrop with Video & Cursor Reveal Lens */}
-      <TerminalCodeBackdrop enableLens={true} />
+      {/* 1. Terminal / Clean Ambient Video Backdrop */}
+      <TerminalCodeBackdrop enableLens={false} />
 
       {/* 2. Soft sky ambient radial tint */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[520px] bg-gradient-to-b from-[#D7EAF0]/45 via-[#A9D8F2]/20 to-transparent pointer-events-none z-0" />
@@ -39,7 +42,7 @@ export const HeroSection: React.FC = () => {
 
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/85 backdrop-blur-md border border-[rgba(23,107,135,0.2)] shadow-2xs text-[11px] font-mono text-[#176B87]">
             <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
-            <span>Video & Code Stream</span>
+            <span>Backend & AI Systems</span>
           </div>
         </div>
 
@@ -75,7 +78,7 @@ export const HeroSection: React.FC = () => {
         </div>
 
         {/* CTAs */}
-        <div className="anim-cta flex flex-wrap items-center justify-center gap-4">
+        <div className="anim-cta flex flex-wrap items-center justify-center gap-4 mb-8">
           <Button
             variant="primary"
             size="lg"
@@ -94,9 +97,7 @@ export const HeroSection: React.FC = () => {
           <Button
             variant="secondary"
             size="lg"
-            href={profile.cvPath}
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={() => setIsCvOpen(true)}
             onMouseEnter={() => setIsContactHovered(true)}
             onMouseLeave={() => setIsContactHovered(false)}
             onFocus={() => setIsContactHovered(true)}
@@ -107,6 +108,11 @@ export const HeroSection: React.FC = () => {
             <span>Xem CV</span>
           </Button>
         </div>
+
+        {/* Floating Terminal Widget: Encapsulated macOS-style code stream */}
+        <div className="w-full px-2 sm:px-4 mb-4">
+          <FloatingTerminalWidget />
+        </div>
       </div>
 
       {/* Hero Visual Composition with Living Desk Scene & Simulations */}
@@ -116,6 +122,9 @@ export const HeroSection: React.FC = () => {
           isContactHovered={isContactHovered}
         />
       </div>
+
+      {/* Quick View CV Modal */}
+      <CvModal isOpen={isCvOpen} onClose={() => setIsCvOpen(false)} />
     </section>
   );
 };

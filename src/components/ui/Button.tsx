@@ -11,6 +11,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   href?: string;
   target?: string;
   rel?: string;
+  download?: string;
   children: React.ReactNode;
   className?: string;
 }
@@ -21,12 +22,13 @@ export const Button: React.FC<ButtonProps> = ({
   href,
   target,
   rel,
+  download,
   children,
   className,
   ...props
 }) => {
   const baseStyles =
-    "inline-flex items-center justify-center font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#176B87] focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer select-none rounded-full";
+    "inline-flex items-center justify-center font-medium transition-all duration-200 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#176B87] focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer select-none rounded-full";
 
   const sizeStyles = {
     sm: "h-9 px-4 text-xs tracking-wide",
@@ -49,7 +51,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   if (href) {
     return (
-      <a href={href} target={target} rel={rel} className={combinedClass}>
+      <a href={href} target={target} rel={rel} download={download} className={combinedClass}>
         {children}
       </a>
     );

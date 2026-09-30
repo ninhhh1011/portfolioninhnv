@@ -17,7 +17,7 @@ export const SectionReveal: React.FC<SectionRevealProps> = ({
   delayMs = 0,
   direction = "up",
   className = "",
-  threshold = 0.02,
+  threshold = 0.05,
 }) => {
   const { ref, isInView } = useSectionInView<HTMLDivElement>({ threshold });
   const prefersReduced = useReducedMotionSafe();
@@ -26,13 +26,13 @@ export const SectionReveal: React.FC<SectionRevealProps> = ({
     if (prefersReduced || isInView) return "translate3d(0, 0, 0)";
     switch (direction) {
       case "up":
-        return "translate3d(0, 22px, 0)";
+        return "translate3d(0, 15px, 0)";
       case "down":
-        return "translate3d(0, -22px, 0)";
+        return "translate3d(0, -15px, 0)";
       case "left":
-        return "translate3d(24px, 0, 0)";
+        return "translate3d(18px, 0, 0)";
       case "right":
-        return "translate3d(-24px, 0, 0)";
+        return "translate3d(-18px, 0, 0)";
       case "none":
       default:
         return "translate3d(0, 0, 0)";
@@ -42,7 +42,7 @@ export const SectionReveal: React.FC<SectionRevealProps> = ({
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${className}`}
+      className={`transition-all duration-500 ease-out ${className}`}
       style={{
         opacity: prefersReduced || isInView ? 1 : 0,
         transform: getTransform(),

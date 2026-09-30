@@ -19,7 +19,9 @@ export const ProjectsSection: React.FC = () => {
   const { setActiveProject } = usePortfolioInteraction();
 
   return (
-    <section id="projects" className="py-20 md:py-28 px-4 max-w-6xl mx-auto">
+    <section id="projects" className="py-20 md:py-28 px-4 max-w-6xl mx-auto relative">
+      {/* Anchor alias for #du-an */}
+      <div id="du-an" className="absolute -top-24 pointer-events-none" />
       {/* Section Header */}
       <SectionReveal direction="up" delayMs={50}>
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -55,15 +57,11 @@ export const ProjectsSection: React.FC = () => {
                   className="overflow-hidden border border-[rgba(66,126,138,0.18)] p-6 md:p-10 shadow-[0_12px_40px_rgba(24,59,78,0.06)] hover:shadow-[0_20px_50px_rgba(24,59,78,0.1)] transition-all duration-300 hover:-translate-y-1.5"
                 >
                   <CardContent className="space-y-0">
-                    <div
-                      className={`grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center ${
-                        !isEven ? "lg:flex-row-reverse" : ""
-                      }`}
-                    >
-                      {/* Visual Preview (7 cols on lg) with subtle scale on hover */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
+                      {/* Visual Preview (7 cols on lg) - Right for Project 1, Left for Project 2 */}
                       <div
                         className={`lg:col-span-7 ${
-                          !isEven ? "lg:order-2" : "lg:order-1"
+                          isEven ? "lg:order-2" : "lg:order-1"
                         } w-full transition-transform duration-500 ease-out group-hover:scale-[1.018]`}
                       >
                         {project.previewType === "smart-parking" ? (
@@ -73,10 +71,10 @@ export const ProjectsSection: React.FC = () => {
                         )}
                       </div>
 
-                      {/* Project Info (5 cols on lg) */}
+                      {/* Project Info (5 cols on lg) - Left for Project 1, Right for Project 2 */}
                       <div
                         className={`lg:col-span-5 ${
-                          !isEven ? "lg:order-1" : "lg:order-2"
+                          isEven ? "lg:order-1" : "lg:order-2"
                         } flex flex-col justify-center`}
                       >
                         <div className="flex items-center gap-2 mb-2">

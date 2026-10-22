@@ -131,7 +131,7 @@ export const ChessIllustration: React.FC = () => {
             </div>
             <div className="flex justify-between text-[9px] text-[#526779] mt-1 font-mono">
               <span>Độ sâu: 18 ply</span>
-              <span>Chỉ số Engine Eval (không phải Elo)</span>
+              <span>Chỉ số Engine Eval</span>
             </div>
           </div>
 

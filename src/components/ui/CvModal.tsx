@@ -58,7 +58,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
             </div>
             <div>
               <h2 id="cv-modal-title" className="font-serif text-base font-bold text-[#183B4E]">
-                Bản tóm tắt CV (1 Trang chuẩn Harvard)
+                Bản tóm tắt CV
               </h2>
               <p className="text-[11px] text-[#526779]">
                 Nhấn ESC hoặc nút Đóng để thoát · Tải tệp PDF chính thức bên dưới
@@ -152,7 +152,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
               <div className="flex justify-between items-baseline">
                 <div>
                   <strong className="font-semibold text-[#183B4E]">VinUni</strong> —{" "}
-                  <em>Chương trình AI thực chiến Khóa 3 (6 tuần Build Phase + 6 tuần thực tập)</em>
+                  <em>Chương trình AI thực chiến, Khóa 3</em>
                 </div>
                 <span className="text-[#526779] font-mono">2026</span>
               </div>

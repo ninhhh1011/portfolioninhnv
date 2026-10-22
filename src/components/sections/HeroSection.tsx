@@ -117,7 +117,7 @@ export const HeroSection: React.FC = () => {
         />
       </div>
 
-      {/* Quick-view CV Harvard 1-Page Modal */}
+      {/* Quick-view CV Modal */}
       <CvModal isOpen={isCvOpen} onClose={() => setIsCvOpen(false)} />
     </section>
   );

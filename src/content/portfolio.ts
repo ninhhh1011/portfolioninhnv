@@ -83,7 +83,7 @@ export const portfolioData: {
     email: "nguyenninh10112006@gmail.com",
     github: "https://github.com/ninhhh1011",
     linkedin: "https://www.linkedin.com/in/ninh-nguy%E1%BB%85n-704574412",
-    cvPath: "/Nguyen_Van_Ninh_CV_Harvard_1_Trang (1).pdf",
+    cvPath: "/cv-nguyen-van-ninh.pdf",
   },
   education: [
     {

@@ -160,7 +160,7 @@ export const ContactSection: React.FC = () => {
         <div className="pt-8 border-t border-[rgba(66,126,138,0.18)] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#526779]">
           <div className="flex items-center gap-2">
             <span className="font-serif font-bold text-sm text-[#183B4E]">Ninh.</span>
-            <span>© 2026 Nguyễn Văn Ninh. Thiết kế theo tinh thần Craft Soft Editorial.</span>
+            <span>© 2026 Nguyễn Văn Ninh. All rights reserved.</span>
           </div>
 
           <button

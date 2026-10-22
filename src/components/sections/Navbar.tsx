@@ -160,7 +160,7 @@ export const Navbar: React.FC = () => {
         </nav>
       </header>
 
-      {/* CV Harvard 1-Page Modal */}
+      {/* CV Modal */}
       <CvModal isOpen={isCvOpen} onClose={() => setIsCvOpen(false)} />
     </>
   );

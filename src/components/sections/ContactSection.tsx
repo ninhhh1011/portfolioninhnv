@@ -1,27 +1,76 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail, Copy, Check, ArrowUp, FileText } from "lucide-react";
+import { Mail, Copy, Check, ArrowUp, FileText, Sparkles } from "lucide-react";
+import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/Button";
 import { GithubIcon, LinkedInIcon } from "@/components/ui/Icons";
 import { portfolioData } from "@/content/portfolio";
 import { SectionReveal } from "@/components/ui/SectionReveal";
 import { SpotlightSurface } from "@/components/ui/SpotlightSurface";
+import { StarlightCanvas } from "@/components/visuals/StarlightCanvas";
+import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
 
 export const ContactSection: React.FC = () => {
   const { profile } = portfolioData;
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
+  const prefersReduced = useReducedMotionSafe();
 
-  const handleCopyEmail = async () => {
+  const triggerConfettiBurst = (event?: React.MouseEvent) => {
+    if (prefersReduced) return;
+
+    // Get origin coordinates from click or default to center
+    let originX = 0.5;
+    let originY = 0.6;
+    if (event) {
+      originX = event.clientX / window.innerWidth;
+      originY = event.clientY / window.innerHeight;
+    }
+
+    // Launch multi-burst cyber confetti
+    confetti({
+      particleCount: 65,
+      spread: 75,
+      origin: { x: originX, y: originY },
+      colors: ["#176B87", "#10B981", "#64B5F6", "#A9D8F2", "#B388FF", "#FFE6D6"],
+      disableForReducedMotion: true,
+      zIndex: 99999,
+    });
+
+    // Secondary delayed burst for fireworks effect
+    setTimeout(() => {
+      confetti({
+        particleCount: 40,
+        angle: 60,
+        spread: 55,
+        origin: { x: Math.max(0.1, originX - 0.08), y: originY },
+        colors: ["#10B981", "#A9D8F2", "#176B87"],
+        disableForReducedMotion: true,
+        zIndex: 99999,
+      });
+      confetti({
+        particleCount: 40,
+        angle: 120,
+        spread: 55,
+        origin: { x: Math.min(0.9, originX + 0.08), y: originY },
+        colors: ["#64B5F6", "#B388FF", "#176B87"],
+        disableForReducedMotion: true,
+        zIndex: 99999,
+      });
+    }, 160);
+  };
+
+  const handleCopyEmail = async (e: React.MouseEvent) => {
     try {
       await navigator.clipboard.writeText(profile.email);
       setCopied(true);
       setCopyError(false);
-      setTimeout(() => setCopied(false), 3000);
+      triggerConfettiBurst(e);
+      setTimeout(() => setCopied(false), 3500);
     } catch {
       setCopyError(true);
-      setTimeout(() => setCopyError(false), 3000);
+      setTimeout(() => setCopyError(false), 3500);
     }
   };
 
@@ -34,13 +83,16 @@ export const ContactSection: React.FC = () => {
       id="contact"
       className="relative pt-24 md:pt-32 pb-14 px-4 bg-gradient-to-b from-[#FCF9F7] via-[#D7EAF0]/40 to-[#D7EAF0]/75 border-t border-[rgba(66,126,138,0.18)] select-none overflow-hidden"
     >
+      {/* Interactive Starlight Canvas Finale */}
+      <StarlightCanvas />
+
       {/* Open-sky ambient finale glow */}
       <div
         className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] rounded-full bg-gradient-to-t from-[#A9D8F2]/30 via-[#D7EAF0]/20 to-transparent blur-3xl pointer-events-none -z-10"
         aria-hidden="true"
       />
 
-      <div className="max-w-4xl mx-auto text-center">
+      <div className="max-w-4xl mx-auto text-center relative z-10">
         {/* Eyebrow */}
         <SectionReveal direction="up" delayMs={50}>
           <span className="text-xs font-semibold uppercase tracking-widest text-[#176B87] bg-white px-3.5 py-1 rounded-full border border-[rgba(23,107,135,0.2)] shadow-xs">
@@ -81,6 +133,7 @@ export const ContactSection: React.FC = () => {
                     size="sm"
                     href={`mailto:${profile.email}`}
                     className="gap-1.5 w-full sm:w-auto text-xs px-4"
+                    data-magnetic="true"
                   >
                     <Mail className="w-3.5 h-3.5" />
                     <span>Gửi Mail</span>
@@ -90,9 +143,10 @@ export const ContactSection: React.FC = () => {
                     onClick={handleCopyEmail}
                     aria-label="Sao chép địa chỉ email"
                     className="inline-flex items-center justify-center p-2.5 rounded-full text-[#526779] hover:text-[#183B4E] hover:bg-[#F3F1EE] border border-transparent hover:border-[rgba(66,126,138,0.2)] transition-colors cursor-pointer"
+                    data-magnetic="true"
                   >
                     {copied ? (
-                      <Check className="w-4 h-4 text-[#38A169]" />
+                      <Check className="w-4 h-4 text-[#10B981] animate-bounce" />
                     ) : (
                       <Copy className="w-4 h-4" />
                     )}
@@ -105,9 +159,10 @@ export const ContactSection: React.FC = () => {
 
         {/* Copy feedback notification */}
         {copied && (
-          <p className="text-xs text-[#22543D] bg-[#DDF3E8] py-1 px-3.5 rounded-full inline-block mb-8 border border-[#9AE6B4]/80 shadow-2xs animate-[heroFadeUp_0.3s_ease-out]">
-            Đã sao chép địa chỉ email vào clipboard!
-          </p>
+          <div className="inline-flex items-center gap-2 text-xs text-[#22543D] bg-[#DDF3E8] py-1.5 px-4 rounded-full mb-8 border border-[#9AE6B4] shadow-xs animate-[heroFadeUp_0.3s_ease-out]">
+            <Sparkles className="w-3.5 h-3.5 text-[#10B981]" />
+            <span>Đã sao chép email! Hãy gửi cho tôi một thông điệp nhé.</span>
+          </div>
         )}
         {copyError && (
           <p className="text-xs text-[#9C4221] bg-[#FFE6D6] py-1 px-3.5 rounded-full inline-block mb-8 border border-[#FBD38D]">
@@ -125,6 +180,7 @@ export const ContactSection: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="gap-2 group/social hover:-translate-y-1 transition-all"
+              data-magnetic="true"
             >
               <GithubIcon className="w-4 h-4 transition-transform group-hover/social:scale-110" />
               <span>GitHub</span>
@@ -137,6 +193,7 @@ export const ContactSection: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="gap-2 group/social hover:-translate-y-1 transition-all"
+              data-magnetic="true"
             >
               <LinkedInIcon className="w-4 h-4 transition-transform group-hover/social:scale-110" />
               <span>LinkedIn</span>
@@ -149,6 +206,7 @@ export const ContactSection: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="gap-2 group/social hover:-translate-y-1 transition-all"
+              data-magnetic="true"
             >
               <FileText className="w-4 h-4 text-[#176B87] transition-transform group-hover/social:scale-110" />
               <span>Hồ sơ CV (PDF)</span>
@@ -156,7 +214,7 @@ export const ContactSection: React.FC = () => {
           </div>
         </SectionReveal>
 
-        {/* Bottom bar with Back to top */}
+        {/* Bottom bar with Magnetic Back-to-Top Rocket */}
         <div className="pt-8 border-t border-[rgba(66,126,138,0.18)] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#526779]">
           <div className="flex items-center gap-2">
             <span className="font-serif font-bold text-sm text-[#183B4E]">Ninh.</span>
@@ -165,10 +223,11 @@ export const ContactSection: React.FC = () => {
 
           <button
             onClick={scrollToTop}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-[#183B4E] hover:text-[#176B87] hover:bg-white/90 border border-[rgba(66,126,138,0.2)] shadow-2xs hover:shadow-xs transition-all hover:-translate-y-0.5 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#183B4E] hover:text-[#176B87] hover:bg-white/95 border border-[rgba(66,126,138,0.22)] shadow-2xs hover:shadow-xs transition-all hover:-translate-y-1 cursor-pointer font-medium"
+            data-magnetic="true"
           >
             <span>Về đầu trang</span>
-            <ArrowUp className="w-3.5 h-3.5 text-[#176B87]" />
+            <ArrowUp className="w-3.5 h-3.5 text-[#176B87] animate-pulse" />
           </button>
         </div>
       </div>

@@ -37,19 +37,8 @@ export const ProjectsSection: React.FC = () => {
         </div>
       </SectionReveal>
 
-      {/* 3D Master Slide Theater Stage */}
-      <Master3DSlider
-        tabs={projects.map((p) => ({
-          id: p.id,
-          title: p.title,
-          subtitle: p.subtitle,
-        }))}
-        onIndexChange={(idx) => {
-          if (projects[idx]) {
-            setActiveProject(projects[idx].id as ProjectContextType);
-          }
-        }}
-      >
+      {/* 3D Master Horizontal Slide Track (Auto-sliding with pause on hover) */}
+      <Master3DSlider speed={0.85}>
         {projects.map((project: ProjectItem, index: number) => {
           const isEven = index % 2 === 0;
 

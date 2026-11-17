@@ -12,6 +12,8 @@ import { ChessIllustration } from "@/components/visuals/ChessIllustration";
 import { portfolioData, ProjectItem } from "@/content/portfolio";
 import { SectionReveal } from "@/components/ui/SectionReveal";
 import { SpotlightSurface } from "@/components/ui/SpotlightSurface";
+import { HolographicTiltCard } from "@/components/ui/HolographicTiltCard";
+import { Master3DSlider } from "@/components/ui/Master3DSlider";
 import { usePortfolioInteraction, ProjectContextType } from "@/context/PortfolioInteractionContext";
 
 export const ProjectsSection: React.FC = () => {
@@ -19,10 +21,10 @@ export const ProjectsSection: React.FC = () => {
   const { setActiveProject } = usePortfolioInteraction();
 
   return (
-    <section id="projects" className="py-20 md:py-28 px-4 max-w-6xl mx-auto">
+    <section id="projects" className="py-20 md:py-28 px-4 max-w-6xl mx-auto overflow-hidden">
       {/* Section Header */}
       <SectionReveal direction="up" delayMs={50}>
-        <div className="text-center max-w-2xl mx-auto mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="text-xs font-semibold uppercase tracking-widest text-[#176B87] bg-[#D7EAF0]/60 px-3.5 py-1 rounded-full border border-[rgba(23,107,135,0.15)] shadow-xs">
             Sản phẩm tiêu biểu
           </span>
@@ -35,13 +37,24 @@ export const ProjectsSection: React.FC = () => {
         </div>
       </SectionReveal>
 
-      {/* Projects List - Alternating Layout with Spotlight and Cinematic Depth */}
-      <div className="space-y-16 md:space-y-24">
+      {/* 3D Master Coverflow Slider & Dual Grid View */}
+      <Master3DSlider
+        onIndexChange={(idx) => {
+          if (projects[idx]) {
+            setActiveProject(projects[idx].id as ProjectContextType);
+          }
+        }}
+      >
         {projects.map((project: ProjectItem, index: number) => {
           const isEven = index % 2 === 0;
 
           return (
-            <SectionReveal key={project.id} direction="up" delayMs={index * 120}>
+            <HolographicTiltCard
+              key={project.id}
+              maxTilt={10}
+              glareIntensity={0.35}
+              className="rounded-3xl"
+            >
               <SpotlightSurface
                 variant={isEven ? "sky" : "lavender"}
                 className="rounded-3xl"
@@ -52,7 +65,7 @@ export const ProjectsSection: React.FC = () => {
               >
                 <Card
                   hoverable
-                  className="overflow-hidden border border-[rgba(66,126,138,0.18)] p-6 md:p-10 shadow-[0_12px_40px_rgba(24,59,78,0.06)] hover:shadow-[0_20px_50px_rgba(24,59,78,0.1)] transition-all duration-300 hover:-translate-y-1.5"
+                  className="overflow-hidden border border-[rgba(66,126,138,0.22)] p-6 md:p-10 shadow-[0_16px_50px_rgba(24,59,78,0.08)] hover:shadow-[0_24px_65px_rgba(24,59,78,0.14)] transition-all duration-300 backdrop-blur-xs bg-white/95"
                 >
                   <CardContent className="space-y-0">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
@@ -61,6 +74,7 @@ export const ProjectsSection: React.FC = () => {
                         className={`lg:col-span-7 ${
                           isEven ? "lg:order-2" : "lg:order-1"
                         } w-full transition-transform duration-500 ease-out group-hover:scale-[1.018]`}
+                        style={{ transform: "translateZ(25px)" }}
                       >
                         {project.previewType === "smart-parking" ? (
                           <SmartParkingIllustration />
@@ -74,6 +88,7 @@ export const ProjectsSection: React.FC = () => {
                         className={`lg:col-span-5 ${
                           isEven ? "lg:order-1" : "lg:order-2"
                         } flex flex-col justify-center`}
+                        style={{ transform: "translateZ(35px)" }}
                       >
                         <div className="flex items-center gap-2 mb-2">
                           <Chip variant="sky" size="sm">
@@ -120,7 +135,7 @@ export const ProjectsSection: React.FC = () => {
                               <ProjectModal
                                 project={project}
                                 trigger={
-                                  <Button variant="primary" size="md" className="gap-2">
+                                  <Button variant="primary" size="md" className="gap-2" data-magnetic="true">
                                     <Info className="w-4 h-4" />
                                     <span>Xem chi tiết & Luồng kỹ thuật</span>
                                   </Button>
@@ -137,6 +152,7 @@ export const ProjectsSection: React.FC = () => {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="gap-2 group/btn"
+                                  data-magnetic="true"
                                 >
                                   <ExternalLink className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
                                   <span>Mở Demo</span>
@@ -151,6 +167,7 @@ export const ProjectsSection: React.FC = () => {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="gap-2"
+                                  data-magnetic="true"
                                 >
                                   <GithubIcon className="w-4 h-4" />
                                   <span>Mã nguồn</span>
@@ -160,7 +177,7 @@ export const ProjectsSection: React.FC = () => {
                               <ProjectModal
                                 project={project}
                                 trigger={
-                                  <Button variant="outline" size="md" className="gap-1.5">
+                                  <Button variant="outline" size="md" className="gap-1.5" data-magnetic="true">
                                     <Info className="w-4 h-4 text-[#176B87]" />
                                     <span>Chi tiết</span>
                                   </Button>
@@ -174,10 +191,10 @@ export const ProjectsSection: React.FC = () => {
                   </CardContent>
                 </Card>
               </SpotlightSurface>
-            </SectionReveal>
+            </HolographicTiltCard>
           );
         })}
-      </div>
+      </Master3DSlider>
     </section>
   );
 };

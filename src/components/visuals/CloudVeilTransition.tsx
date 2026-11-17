@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
+import { InteractiveCloudCanvas } from "./InteractiveCloudCanvas";
 
 export interface CloudVeilTransitionProps {
   variant?: "sky-to-cream" | "cream-to-lavender" | "lavender-to-sky" | "open-sky";
@@ -30,22 +31,25 @@ export const CloudVeilTransition: React.FC<CloudVeilTransitionProps> = ({
 
   return (
     <div
-      className={`relative w-full h-16 md:h-24 pointer-events-none select-none overflow-hidden my-4 ${className}`}
+      className={`relative w-full h-20 md:h-28 select-none overflow-hidden my-6 ${className}`}
       aria-hidden="true"
     >
       {/* Soft gradient wash */}
-      <div className={`absolute inset-0 bg-gradient-to-b ${getGradient()}`} />
+      <div className={`absolute inset-0 bg-gradient-to-b ${getGradient()} pointer-events-none`} />
 
-      {/* Floating subtle cloud wisps */}
+      {/* Physics-driven Interactive Clouds Canvas with mouse repulsion */}
+      <InteractiveCloudCanvas variant={variant} particleCount={12} />
+
+      {/* Floating subtle cloud wisps as secondary atmospheric background */}
       {!prefersReduced && (
         <>
-          <div className="absolute top-1/2 -left-20 w-80 h-16 rounded-full bg-white/50 blur-xl anim-drift-slow" />
-          <div className="absolute top-1/2 -right-20 w-96 h-20 rounded-full bg-white/60 blur-xl anim-drift-reverse" />
+          <div className="absolute top-1/2 -left-20 w-80 h-16 rounded-full bg-white/40 blur-2xl anim-drift-slow pointer-events-none" />
+          <div className="absolute top-1/2 -right-20 w-96 h-20 rounded-full bg-white/45 blur-2xl anim-drift-reverse pointer-events-none" />
         </>
       )}
 
       {/* Ultra-soft hairline divider */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-4/5 max-w-4xl h-[1px] bg-gradient-to-r from-transparent via-[rgba(66,126,138,0.12)] to-transparent" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-4/5 max-w-4xl h-[1px] bg-gradient-to-r from-transparent via-[rgba(66,126,138,0.18)] to-transparent pointer-events-none z-10" />
     </div>
   );
 };

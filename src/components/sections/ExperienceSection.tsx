@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Briefcase, Calendar, CheckCircle2, Activity, Radio, Compass, Gauge, Trophy } from "lucide-react";
+import { Briefcase, Calendar, CheckCircle2, Activity, Radio, Compass, Gauge, Trophy, Zap } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Chip } from "@/components/ui/Chip";
 import { portfolioData, ExperienceItem } from "@/content/portfolio";
@@ -17,6 +17,7 @@ const PIPELINE_STEPS = [
     title: "GPS Ping",
     desc: "Nhận tọa độ xe realtime",
     detail: "lat/lon · 60s ping",
+    metric: "100% sync",
     icon: Radio,
   },
   {
@@ -25,6 +26,7 @@ const PIPELINE_STEPS = [
     title: "Map Matching",
     desc: "Khớp lưới đường PostGIS",
     detail: "OSRM nearest line",
+    metric: "99.4% match",
     icon: Compass,
   },
   {
@@ -33,6 +35,7 @@ const PIPELINE_STEPS = [
     title: "Detour & ETA",
     desc: "Tính lộ trình phụ trội",
     detail: "+2.4km · 6 phút ETA",
+    metric: "< 80ms query",
     icon: Gauge,
   },
   {
@@ -41,6 +44,7 @@ const PIPELINE_STEPS = [
     title: "Station Ranking",
     desc: "Lọc & xếp hạng tối ưu",
     detail: "Pin & khoảng cách",
+    metric: "Rank #1 top pick",
     icon: Trophy,
   },
 ];
@@ -64,7 +68,7 @@ export const ExperienceSection: React.FC = () => {
   }, [prefersReduced, isDocVisible]);
 
   return (
-    <section id="experience" className="py-20 md:py-28 px-4 max-w-5xl mx-auto relative">
+    <section id="experience" className="py-20 md:py-28 px-4 max-w-5xl mx-auto relative overflow-hidden">
       {/* Anchor alias */}
       <div id="kinh-nghiem" className="absolute -top-24 pointer-events-none" />
 
@@ -83,12 +87,17 @@ export const ExperienceSection: React.FC = () => {
         </div>
       </SectionReveal>
 
-      {/* Animated Technical Timeline Spine */}
+      {/* Cybernetic Animated Timeline Spine */}
       <div className="relative pl-7 md:pl-9 space-y-12">
-        {/* Animated vertical spine */}
-        <div className="absolute left-2.5 md:left-3 top-4 bottom-4 w-[2px] bg-gradient-to-b from-[#176B87] via-[#427E8A]/60 to-[#D7EAF0]">
-          {/* Subtle traveling light pulse */}
-          <div className="w-full h-20 bg-white/80 blur-xs rounded-full animate-[gentleDrift_8s_ease-in-out_infinite]" />
+        {/* Animated vertical spine with glowing pulse */}
+        <div className="absolute left-2.5 md:left-3 top-4 bottom-4 w-[3px] bg-gradient-to-b from-[#176B87] via-[#427E8A] to-[#D7EAF0] rounded-full overflow-hidden">
+          {/* Traveling Photon Pulse along the timeline wire */}
+          {!prefersReduced && (
+            <div
+              className="absolute left-0 w-full h-24 bg-gradient-to-b from-transparent via-white to-[#64B5F6] blur-[2px] animate-[gentleDrift_4s_linear_infinite]"
+              style={{ filter: "drop-shadow(0 0 6px #10B981)" }}
+            />
+          )}
         </div>
 
         {experience.map((exp: ExperienceItem, expIndex: number) => {
@@ -101,21 +110,26 @@ export const ExperienceSection: React.FC = () => {
               delayMs={expIndex * 150}
               className="relative group"
             >
-              {/* Timeline node with soft glowing pulse */}
-              <div className="absolute -left-[31px] md:-left-[39px] top-6 w-5 h-5 rounded-full bg-white border-4 border-[#176B87] shadow-[0_0_12px_rgba(23,107,135,0.35)] group-hover:scale-125 group-hover:border-[#427E8A] transition-all duration-300 z-10" />
+              {/* Timeline node with soft glowing pulse and radar shockwave */}
+              <div className="absolute -left-[31px] md:-left-[39px] top-6 w-5 h-5 rounded-full bg-white border-4 border-[#176B87] shadow-[0_0_14px_rgba(23,107,135,0.45)] group-hover:scale-125 group-hover:border-[#427E8A] transition-all duration-300 z-10 flex items-center justify-center">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-ping" />
+              </div>
 
               {/* Horizontal connector line */}
-              <div className="absolute -left-[14px] top-[32px] w-3 h-[2px] bg-[#176B87]/40 pointer-events-none" />
+              <div className="absolute -left-[14px] top-[32px] w-3 h-[2px] bg-[#176B87]/50 pointer-events-none" />
 
               <SpotlightSurface variant="teal" className="rounded-3xl">
                 <Card
                   hoverable
-                  className="p-6 md:p-8 border-[rgba(66,126,138,0.18)] shadow-[0_8px_30px_rgba(24,59,78,0.05)] hover:shadow-[0_16px_40px_rgba(24,59,78,0.09)] transition-all duration-300 hover:-translate-y-1"
+                  className="p-6 md:p-8 border-[rgba(66,126,138,0.22)] shadow-[0_10px_35px_rgba(24,59,78,0.06)] hover:shadow-[0_20px_50px_rgba(24,59,78,0.12)] transition-all duration-300 hover:-translate-y-1 bg-white/95 backdrop-blur-xs"
                 >
                   <CardHeader>
                     <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
                       <div className="flex items-center gap-2.5">
-                        <span className="p-2 rounded-xl bg-[#D7EAF0] text-[#176B87] shadow-2xs group-hover:bg-[#176B87] group-hover:text-white transition-colors duration-300">
+                        <span
+                          className="p-2 rounded-xl bg-[#D7EAF0] text-[#176B87] shadow-2xs group-hover:bg-[#176B87] group-hover:text-white transition-all duration-300 group-hover:rotate-6"
+                          data-magnetic="true"
+                        >
                           <Briefcase className="w-4 h-4" />
                         </span>
                         <CardTitle className="text-xl md:text-2xl group-hover:text-[#176B87] transition-colors">
@@ -136,30 +150,41 @@ export const ExperienceSection: React.FC = () => {
                       </div>
                     </div>
 
-                    <p className="text-sm md:text-base font-semibold text-[#176B87] mt-1">
-                      {exp.role}
+                    <p className="text-sm md:text-base font-semibold text-[#176B87] mt-1 flex items-center gap-2">
+                      <span>{exp.role}</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#176B87]" />
+                      <span className="text-xs font-mono font-normal text-[#526779]">VinUni AI Research</span>
                     </p>
                   </CardHeader>
 
                   <CardContent>
-                    {/* SƠ ĐỒ PIPELINE 4 BƯỚC CÓ ĐÈN TÍN HIỆU TUẦN TỰ (VinSmartFuture) */}
+                    {/* SƠ ĐỒ PIPELINE 4 BƯỚC CÓ ĐÈN TÍN HIỆU TUẦN TỰ & CYBER CIRCUIT (VinSmartFuture) */}
                     {isVinSmartFuture && (
-                      <div className="mb-6 p-4 rounded-2xl bg-gradient-to-br from-[#F3F8FA] via-white to-[#F0F7F9] border border-[rgba(23,107,135,0.2)] shadow-xs">
-                        <div className="flex items-center justify-between mb-3 pb-2 border-b border-[rgba(23,107,135,0.1)]">
+                      <div className="mb-6 p-4 rounded-2xl bg-gradient-to-br from-[#F3F8FA] via-white to-[#F0F7F9] border border-[rgba(23,107,135,0.25)] shadow-xs relative overflow-hidden">
+                        {/* Background subtle circuit grid lines */}
+                        <div
+                          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+                          style={{
+                            backgroundImage: "linear-gradient(#176B87 1px, transparent 1px), linear-gradient(90deg, #176B87 1px, transparent 1px)",
+                            backgroundSize: "20px 20px",
+                          }}
+                        />
+
+                        <div className="flex items-center justify-between mb-3 pb-2 border-b border-[rgba(23,107,135,0.12)] relative z-10">
                           <div className="flex items-center gap-1.5">
-                            <Activity className="w-4 h-4 text-[#176B87]" />
+                            <Zap className="w-4 h-4 text-[#176B87] animate-pulse" />
                             <h4 className="text-xs md:text-sm font-bold font-serif text-[#183B4E]">
                               Kiến trúc Data Pipeline định tuyến trạm sạc
                             </h4>
                           </div>
-                          <span className="font-mono text-[10px] text-[#176B87] bg-[#D7EAF0] px-2 py-0.5 rounded-full flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
-                            <span>Vòng lặp tuần hoàn 2s</span>
+                          <span className="font-mono text-[10px] text-[#176B87] bg-white/90 px-2.5 py-0.5 rounded-full border border-[rgba(23,107,135,0.2)] flex items-center gap-1.5 shadow-2xs">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-ping" />
+                            <span>Vòng quét realtime · 2.0s</span>
                           </span>
                         </div>
 
-                        {/* 4 sequential steps */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 relative">
+                        {/* 4 sequential steps with interactive cyber glow */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 relative z-10">
                           {PIPELINE_STEPS.map((pipe, idx) => {
                             const isActive = pipelineStep === idx;
                             const IconComponent = pipe.icon;
@@ -167,10 +192,10 @@ export const ExperienceSection: React.FC = () => {
                             return (
                               <div
                                 key={pipe.id}
-                                className={`relative p-3 rounded-xl border text-left transition-all duration-500 flex flex-col justify-between ${
+                                className={`relative p-3 rounded-xl border text-left transition-all duration-400 flex flex-col justify-between ${
                                   isActive
-                                    ? "bg-white border-[#176B87] shadow-[0_4px_16px_rgba(23,107,135,0.18)] scale-[1.02] ring-2 ring-[#176B87]/20 z-10"
-                                    : "bg-white/60 border-gray-200/80 opacity-70 hover:opacity-90"
+                                    ? "bg-white border-[#176B87] shadow-[0_6px_22px_rgba(23,107,135,0.22)] scale-[1.03] ring-2 ring-[#176B87]/30 z-10"
+                                    : "bg-white/70 border-gray-200/90 opacity-75 hover:opacity-100"
                                 }`}
                               >
                                 <div>
@@ -179,7 +204,7 @@ export const ExperienceSection: React.FC = () => {
                                     <span
                                       className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded transition-colors ${
                                         isActive
-                                          ? "bg-[#176B87] text-white"
+                                          ? "bg-[#176B87] text-white shadow-2xs"
                                           : "bg-gray-100 text-[#526779]"
                                       }`}
                                     >
@@ -220,8 +245,11 @@ export const ExperienceSection: React.FC = () => {
                                   </p>
                                 </div>
 
-                                <div className="mt-2 pt-1.5 border-t border-gray-100 font-mono text-[9.5px] text-[#176B87]">
-                                  {pipe.detail}
+                                <div className="mt-2.5 pt-1.5 border-t border-gray-100/90 flex items-center justify-between font-mono text-[9.5px]">
+                                  <span className="text-[#526779]">{pipe.detail}</span>
+                                  <span className={`font-bold ${isActive ? "text-[#10B981]" : "text-[#176B87]"}`}>
+                                    {pipe.metric}
+                                  </span>
                                 </div>
                               </div>
                             );
@@ -235,23 +263,23 @@ export const ExperienceSection: React.FC = () => {
                       {exp.bullets.map((bullet, idx) => (
                         <li
                           key={idx}
-                          className="flex items-start gap-3 text-sm md:text-base text-[#183B4E]"
+                          className="flex items-start gap-3 text-sm md:text-base text-[#183B4E] group/item"
                         >
-                          <CheckCircle2 className="w-4 h-4 text-[#176B87] mt-1 shrink-0 transition-transform group-hover:scale-110" />
-                          <span className="leading-relaxed text-[#526779]">{bullet}</span>
+                          <CheckCircle2 className="w-4 h-4 text-[#176B87] mt-1 shrink-0 transition-transform group-hover/item:scale-125 group-hover/item:text-[#10B981]" />
+                          <span className="leading-relaxed">{bullet}</span>
                         </li>
                       ))}
                     </ul>
 
-                    {/* Tech chips */}
-                    <div className="pt-4 border-t border-[rgba(66,126,138,0.1)] flex flex-wrap items-center gap-2">
-                      <span className="text-xs font-semibold text-[#183B4E] mr-1">Công nghệ:</span>
+                    {/* Technologies */}
+                    <div className="flex flex-wrap gap-2 pt-2 border-t border-[rgba(66,126,138,0.12)]">
                       {exp.technologies.map((tech) => (
                         <Chip
                           key={tech}
                           variant="neutral"
                           size="sm"
-                          className="hover:-translate-y-0.5 transition-transform"
+                          className="hover:-translate-y-0.5 hover:shadow-2xs transition-all"
+                          data-magnetic="true"
                         >
                           {tech}
                         </Chip>

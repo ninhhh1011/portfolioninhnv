@@ -161,7 +161,7 @@ export const ContactSection: React.FC = () => {
         {copied && (
           <div className="inline-flex items-center gap-2 text-xs text-[#22543D] bg-[#DDF3E8] py-1.5 px-4 rounded-full mb-8 border border-[#9AE6B4] shadow-xs animate-[heroFadeUp_0.3s_ease-out]">
             <Sparkles className="w-3.5 h-3.5 text-[#10B981]" />
-            <span>Đã sao chép email! Hãy gửi cho tôi một thông điệp nhé.</span>
+            <span>Đã sao chép địa chỉ email vào clipboard!</span>
           </div>
         )}
         {copyError && (

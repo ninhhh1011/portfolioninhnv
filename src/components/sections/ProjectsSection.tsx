@@ -37,8 +37,13 @@ export const ProjectsSection: React.FC = () => {
         </div>
       </SectionReveal>
 
-      {/* 3D Master Coverflow Slider & Dual Grid View */}
+      {/* 3D Master Slide Theater Stage */}
       <Master3DSlider
+        tabs={projects.map((p) => ({
+          id: p.id,
+          title: p.title,
+          subtitle: p.subtitle,
+        }))}
         onIndexChange={(idx) => {
           if (projects[idx]) {
             setActiveProject(projects[idx].id as ProjectContextType);

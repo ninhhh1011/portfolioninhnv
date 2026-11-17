@@ -7,12 +7,16 @@ import { AboutSection } from "@/components/sections/AboutSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { AmbientAtmosphere } from "@/components/visuals/AmbientAtmosphere";
 import { CloudVeilTransition } from "@/components/visuals/CloudVeilTransition";
+import { FluidMagneticCursor } from "@/components/visuals/FluidMagneticCursor";
 import { PortfolioInteractionProvider } from "@/context/PortfolioInteractionContext";
 
 export default function Home() {
   return (
     <PortfolioInteractionProvider>
       <div className="relative min-h-screen flex flex-col bg-[#FCF9F7] text-[#183B4E]">
+        {/* Global Fluid Magnetic Cursor & Particle Trail */}
+        <FluidMagneticCursor />
+
         {/* Global Layered Cinematic Atmosphere */}
         <AmbientAtmosphere />
 

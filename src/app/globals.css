@@ -43,6 +43,14 @@ body {
   scroll-margin-top: 100px;
 }
 
+/* Custom Magnetic and Interactive Enhancements */
+@media (pointer: fine) and (hover: hover) {
+  [data-magnetic="true"] {
+    will-change: transform;
+    transition: transform 0.15s cubic-bezier(0.2, 0, 0.2, 1);
+  }
+}
+
 /* Focus visible styles for high accessibility */
 :focus-visible {
   outline: 2px solid #176B87 !important;

@@ -1,16 +1,18 @@
 "use client";
 
 import React from "react";
-import { Server, Layout, ShieldCheck, Cpu } from "lucide-react";
+import { Server, Layout, ShieldCheck, Cpu, Sparkles } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
-import { Chip } from "@/components/ui/Chip";
 import { AccordionWrapper } from "@/components/ui/AccordionWrapper";
 import { portfolioData, SkillCategory } from "@/content/portfolio";
 import { SectionReveal } from "@/components/ui/SectionReveal";
 import { SpotlightSurface } from "@/components/ui/SpotlightSurface";
+import { InteractiveSkillPill } from "@/components/ui/InteractiveSkillPill";
+import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
 
 export const SkillsSection: React.FC = () => {
   const { skillCategories, aiPractices } = portfolioData;
+  const prefersReduced = useReducedMotionSafe();
 
   const getCategoryIcon = (index: number) => {
     switch (index) {
@@ -36,9 +38,9 @@ export const SkillsSection: React.FC = () => {
 
   return (
     <section id="skills" className="relative py-20 md:py-28 px-4 max-w-6xl mx-auto overflow-hidden">
-      {/* Decorative Technical Ambience Grid (Subtle low-opacity geometry) */}
+      {/* Decorative Technical Ambience Grid */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.035] -z-10"
+        className="absolute inset-0 pointer-events-none opacity-[0.04] -z-10"
         style={{
           backgroundImage:
             "radial-gradient(#183B4E 1px, transparent 1px), radial-gradient(#176B87 1px, #FCF9F7 1px)",
@@ -47,6 +49,14 @@ export const SkillsSection: React.FC = () => {
         }}
         aria-hidden="true"
       />
+
+      {/* Cyber Laser Scanline sweeping across skills */}
+      {!prefersReduced && (
+        <div
+          className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#176B87]/35 to-transparent pointer-events-none -z-10 animate-[gentleDrift_7s_linear_infinite]"
+          aria-hidden="true"
+        />
+      )}
 
       {/* Section Header */}
       <SectionReveal direction="up" delayMs={50}>
@@ -73,11 +83,14 @@ export const SkillsSection: React.FC = () => {
             >
               <Card
                 hoverable
-                className="p-6 md:p-8 flex flex-col justify-between h-full border-[rgba(66,126,138,0.18)] shadow-[0_8px_30px_rgba(24,59,78,0.05)] hover:shadow-[0_16px_40px_rgba(24,59,78,0.09)] transition-all duration-300 hover:-translate-y-1.5"
+                className="p-6 md:p-8 flex flex-col justify-between h-full border-[rgba(66,126,138,0.22)] shadow-[0_10px_35px_rgba(24,59,78,0.06)] hover:shadow-[0_20px_50px_rgba(24,59,78,0.12)] transition-all duration-300 hover:-translate-y-1.5 bg-white/95 backdrop-blur-xs"
               >
                 <div>
                   <CardHeader>
-                    <div className="w-11 h-11 rounded-2xl bg-[#D7EAF0] flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 shadow-2xs">
+                    <div
+                      className="w-11 h-11 rounded-2xl bg-[#D7EAF0] flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 shadow-2xs group-hover:bg-[#176B87] group-hover:text-white"
+                      data-magnetic="true"
+                    >
                       {getCategoryIcon(index)}
                     </div>
                     <CardTitle className="text-xl md:text-2xl group-hover:text-[#176B87] transition-colors">
@@ -89,17 +102,16 @@ export const SkillsSection: React.FC = () => {
                   </CardHeader>
                 </div>
 
-                <CardContent className="mt-5 pt-4 border-t border-[rgba(66,126,138,0.1)]">
-                  <div className="flex flex-wrap gap-2">
-                    {cat.skills.map((skill) => (
-                      <Chip
+                <CardContent className="mt-5 pt-4 border-t border-[rgba(66,126,138,0.12)]">
+                  {/* Zero-gravity Physics floating skill pills */}
+                  <div className="flex flex-wrap gap-2.5">
+                    {cat.skills.map((skill, skillIdx) => (
+                      <InteractiveSkillPill
                         key={skill}
-                        variant="neutral"
-                        size="sm"
-                        className="hover:-translate-y-0.5 hover:bg-white hover:border-[#176B87]/30 transition-all cursor-default"
-                      >
-                        {skill}
-                      </Chip>
+                        skill={skill}
+                        index={skillIdx}
+                        variant={index === 0 ? "sky" : index === 1 ? "neutral" : "lavender"}
+                      />
                     ))}
                   </div>
                 </CardContent>
@@ -120,7 +132,7 @@ export const SkillsSection: React.FC = () => {
         <SectionReveal direction="up" delayMs={100}>
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#EEE7FA] text-[#553C9A] text-xs font-semibold mb-3 border border-[#D6BCFA]/60 shadow-xs">
-              <Cpu className="w-3.5 h-3.5" />
+              <Cpu className="w-3.5 h-3.5 animate-pulse" />
               <span>Thực hành kỹ thuật nâng cao</span>
             </div>
             <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#183B4E] tracking-tight">

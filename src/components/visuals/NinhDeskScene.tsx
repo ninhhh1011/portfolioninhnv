@@ -80,11 +80,11 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
   // If user is actively previewing a project card, immediately switch to coding mode
   const showGreeting = isGreeting && activeProject === "none";
 
-  // Fine-tuned 3D Parallax Tilt (max RotateX ±2°, RotateY ±3°)
+  // Dynamic 3D Parallax Tilt for heightened depth
   const { tiltX, tiltY, translateX, translateY } = usePointerParallax({
-    maxRotateX: 2.0,
-    maxRotateY: 3.0,
-    maxTranslate: 9,
+    maxRotateX: 4.5,
+    maxRotateY: 6.5,
+    maxTranslate: 16,
     containerRef,
   });
 

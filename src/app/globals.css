@@ -364,6 +364,43 @@ body {
   animation: waveHandMotion 1.5s ease-in-out infinite;
 }
 
+/* Kinetic Holographic Headline Shimmer */
+@keyframes holographicShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.anim-holo-shimmer {
+  background: linear-gradient(
+    90deg,
+    #183B4E 0%,
+    #176B87 30%,
+    #427E8A 50%,
+    #176B87 70%,
+    #183B4E 100%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: holographicShimmer 5s linear infinite;
+}
+
+/* Laser Border Beam on Chips */
+.anim-beam-pill {
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.anim-beam-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(23, 107, 135, 0.22);
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {

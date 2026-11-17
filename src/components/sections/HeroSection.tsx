@@ -47,15 +47,15 @@ export const HeroSection: React.FC = () => {
 
         {/* Frosted container ensuring crisp typography while revealing active video backdrop */}
         <div className="w-full backdrop-blur-[1.5px] bg-white/35 border border-white/50 rounded-3xl p-5 sm:p-7 shadow-2xs mb-6">
-          {/* Masked Editorial Headline with Line-Level Stagger */}
+          {/* Masked Editorial Headline with Line-Level Stagger & Holographic Shimmer */}
           <h1 className="anim-headline font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#183B4E] tracking-tight leading-[1.12] mb-5 max-w-3xl mx-auto">
             <span className="block overflow-hidden">
-              <span className="inline-block transform transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
+              <span className="inline-block anim-holo-shimmer transform transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
                 Từ ý tưởng đến
               </span>
             </span>
             <span className="block overflow-hidden">
-              <span className="inline-block transform transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
+              <span className="inline-block anim-holo-shimmer transform transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
                 sản phẩm có thể trải nghiệm.
               </span>
             </span>
@@ -66,12 +66,14 @@ export const HeroSection: React.FC = () => {
             {profile.description}
           </p>
 
-          {/* Specialization Pills */}
+          {/* Specialization Pills with Laser Beam & Magnetic Attributes */}
           <div className="anim-pills flex flex-wrap items-center justify-center gap-2.5">
             {profile.specializations.map((spec) => (
-              <Chip key={spec} variant="sky" size="md">
-                {spec}
-              </Chip>
+              <div key={spec} className="anim-beam-pill" data-magnetic="true">
+                <Chip variant="sky" size="md">
+                  {spec}
+                </Chip>
+              </div>
             ))}
           </div>
         </div>
@@ -88,6 +90,7 @@ export const HeroSection: React.FC = () => {
             onFocus={() => setIsExploreHovered(true)}
             onBlur={() => setIsExploreHovered(false)}
             className="gap-2 transition-transform duration-200"
+            data-magnetic="true"
           >
             <span>Khám phá dự án</span>
             <ArrowDown className={`w-4 h-4 transition-transform duration-200 ${isExploreHovered ? "translate-y-0.5" : ""}`} />
@@ -102,6 +105,7 @@ export const HeroSection: React.FC = () => {
             onFocus={() => setIsContactHovered(true)}
             onBlur={() => setIsContactHovered(false)}
             className="gap-2 cursor-pointer"
+            data-magnetic="true"
           >
             <FileText className="w-4 h-4 text-[#176B87]" />
             <span>Xem CV</span>

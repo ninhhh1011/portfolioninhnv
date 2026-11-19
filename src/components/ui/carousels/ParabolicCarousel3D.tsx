@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { ChevronLeft, ChevronRight, Play, Pause, Orbit, Sparkles, MoveVertical } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { ProjectItem } from "@/content/portfolio";
 import { ProjectCard } from "./ProjectCard";
 import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
@@ -11,13 +11,13 @@ interface ParabolicCarousel3DProps {
 }
 
 export const ParabolicCarousel3D: React.FC<ParabolicCarousel3DProps> = ({ projects }) => {
-  // Use 4 slots to allow smooth circular looping
+  // 4 items circular loop (e.g., 2 projects duplicated to create smooth 3D carousel depth)
   const items = projects.length === 2 ? [...projects, ...projects] : projects;
   const count = items.length;
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [curveType, setCurveType] = useState<"arch" | "bowl">("arch"); // "arch" (⌢ hướng lên) vs "bowl" (⌣)
+  const [isHovered, setIsHovered] = useState(false);
   const prefersReduced = useReducedMotionSafe();
 
   const dragStartXRef = useRef<number | null>(null);
@@ -31,15 +31,18 @@ export const ParabolicCarousel3D: React.FC<ParabolicCarousel3DProps> = ({ projec
     setActiveIndex((prev) => (prev - 1 + count) % count);
   }, [count]);
 
+  // Autoplay with pause on hover
   useEffect(() => {
-    if (!isPlaying || prefersReduced) return;
+    if (!isPlaying || isHovered || prefersReduced) return;
     const timer = setInterval(next, 5000);
     return () => clearInterval(timer);
-  }, [isPlaying, next, prefersReduced]);
+  }, [isPlaying, isHovered, next, prefersReduced]);
 
+  // Pointer drag gestures
   const onPointerDown = (e: React.PointerEvent) => {
     dragStartXRef.current = e.clientX;
     isDraggingRef.current = true;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
   const onPointerUp = (e: React.PointerEvent) => {
@@ -53,24 +56,21 @@ export const ParabolicCarousel3D: React.FC<ParabolicCarousel3DProps> = ({ projec
     isDraggingRef.current = false;
   };
 
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") prev();
+    if (e.key === "ArrowRight") next();
+  };
+
   return (
     <div
-      className="relative w-full py-6 select-none overflow-hidden"
+      className="relative w-full py-4 select-none overflow-hidden"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onKeyDown={onKeyDown}
+      tabIndex={0}
       role="region"
-      aria-label="3D Parabolic Arch Carousel"
+      aria-label="Vòng quay ngựa gỗ Parabol 3D"
     >
-      {/* Top Parabolic Guide Subheader */}
-      <div className="flex items-center justify-center gap-3 mb-4">
-        <button
-          type="button"
-          onClick={() => setCurveType((t) => (t === "arch" ? "bowl" : "arch"))}
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 hover:bg-white border border-[rgba(23,107,135,0.2)] text-xs font-mono text-[#176B87] shadow-2xs transition-all cursor-pointer"
-        >
-          <MoveVertical className="w-3.5 h-3.5" />
-          <span>Đường cong: {curveType === "arch" ? "Vòm Parabol hướng lên (⌢)" : "Lõm Parabol (⌣)"}</span>
-        </button>
-      </div>
-
       {/* 3D Scene Viewport */}
       <div
         className="relative mx-auto h-[600px] sm:h-[560px] md:h-[530px] w-full max-w-6xl flex items-center justify-center cursor-grab active:cursor-grabbing"
@@ -89,36 +89,25 @@ export const ParabolicCarousel3D: React.FC<ParabolicCarousel3DProps> = ({ projec
           aria-hidden="true"
         >
           <defs>
-            <linearGradient id="parabolGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+            <linearGradient id="parabolArchGlow" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#176B87" stopOpacity="0" />
-              <stop offset="25%" stopColor="#64B5F6" stopOpacity="0.6" />
-              <stop offset="50%" stopColor="#176B87" stopOpacity="0.9" />
-              <stop offset="75%" stopColor="#64B5F6" stopOpacity="0.6" />
+              <stop offset="25%" stopColor="#64B5F6" stopOpacity="0.55" />
+              <stop offset="50%" stopColor="#176B87" stopOpacity="0.95" />
+              <stop offset="75%" stopColor="#64B5F6" stopOpacity="0.55" />
               <stop offset="100%" stopColor="#176B87" stopOpacity="0" />
             </linearGradient>
           </defs>
-          {curveType === "arch" ? (
-            // Upward Parabolic Arch (⌢)
-            <path
-              d="M 50,420 Q 500,80 950,420"
-              fill="none"
-              stroke="url(#parabolGlow)"
-              strokeWidth="2.5"
-              strokeDasharray="6 6"
-            />
-          ) : (
-            // Downward Parabolic Bowl (⌣)
-            <path
-              d="M 50,100 Q 500,440 950,100"
-              fill="none"
-              stroke="url(#parabolGlow)"
-              strokeWidth="2.5"
-              strokeDasharray="6 6"
-            />
-          )}
+          {/* Upward Parabolic Arch (⌢) */}
+          <path
+            d="M 40,430 Q 500,70 960,430"
+            fill="none"
+            stroke="url(#parabolArchGlow)"
+            strokeWidth="2.5"
+            strokeDasharray="6 6"
+          />
         </svg>
 
-        {/* Parabolic 3D Cards */}
+        {/* 3D Cards along Parabolic Arch */}
         {items.map((project, idx) => {
           let diff = (idx - activeIndex) % count;
           if (diff > count / 2) diff -= count;
@@ -127,20 +116,19 @@ export const ParabolicCarousel3D: React.FC<ParabolicCarousel3DProps> = ({ projec
           const isCenter = diff === 0;
           const isNeighbor = Math.abs(diff) === 1;
 
-          // Parabolic Math:
-          // x is horizontal offset
-          // y follows parabolic equation: y = factor * (diff^2)
+          // Parabolic Arch Math:
+          // Center card: highest point (apex)
+          // Side cards: lower down along y = k * diff^2 and tilt along tangent
           const translateX = diff * 320;
-          const curveFactor = curveType === "arch" ? 1 : -1;
-          const translateY = curveFactor * (Math.abs(diff) * Math.abs(diff) * 55); // cards drop down on arch, or rise up on bowl
+          const translateY = Math.abs(diff) * Math.abs(diff) * 58; // curves downwards away from apex
           const translateZ = isCenter ? 40 : -Math.abs(diff) * 160;
 
-          // Rotate Z along tangent of parabola + Rotate Y inward
-          const rotateZ = curveFactor * (diff * -7); // tilts along parabolic curve
-          const rotateY = diff * -25; // faces viewer
-          const rotateX = curveType === "arch" ? (isCenter ? 0 : 6) : (isCenter ? 0 : -6);
+          // Tangent tilt angle (rotateZ) + facing angle (rotateY) + slight pitch (rotateX)
+          const rotateZ = diff * -7;
+          const rotateY = diff * -25;
+          const rotateX = isCenter ? 0 : 6;
           const scale = isCenter ? 1 : isNeighbor ? 0.85 : 0.72;
-          const opacity = isCenter ? 1 : isNeighbor ? 0.7 : 0;
+          const opacity = isCenter ? 1 : isNeighbor ? 0.72 : 0;
           const zIndex = 30 - Math.abs(diff) * 10;
 
           return (
@@ -167,9 +155,9 @@ export const ParabolicCarousel3D: React.FC<ParabolicCarousel3DProps> = ({ projec
         })}
       </div>
 
-      {/* Controls & Indicators */}
+      {/* Parabolic Carousel Controls & Indicator Bar */}
       <div className="flex flex-wrap items-center justify-between gap-4 max-w-2xl mx-auto mt-6 px-4">
-        {/* Navigation Arrows */}
+        {/* Navigation Step Buttons */}
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -189,7 +177,7 @@ export const ParabolicCarousel3D: React.FC<ParabolicCarousel3DProps> = ({ projec
           </button>
         </div>
 
-        {/* Dot Indicators */}
+        {/* Parabolic Position Indicators */}
         <div className="flex items-center gap-2">
           {items.map((_, i) => (
             <button

@@ -57,7 +57,6 @@ export const AboutSection: React.FC = () => {
                 onMouseEnter={() => setIsFlipped(true)}
                 onMouseLeave={() => setIsFlipped(false)}
                 onClick={() => setIsFlipped((prev) => !prev)}
-                data-magnetic="true"
                 style={{ perspective: "600px" }}
               >
                 {/* Soft ambient halo */}
@@ -121,7 +120,7 @@ export const AboutSection: React.FC = () => {
             {education.map((item: EducationItem, idx: number) => (
               <SectionReveal key={item.institution} direction="left" delayMs={100 + idx * 100}>
                 <SpotlightSurface variant="subtle" className="rounded-2xl">
-                  <div className="relative bg-white/95 backdrop-blur-xs rounded-2xl p-5 md:p-6 border border-[rgba(66,126,138,0.18)] shadow-xs hover:border-[rgba(66,126,138,0.35)] hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex items-start gap-4 overflow-hidden group/edu">
+                  <div className="relative bg-white/95 backdrop-blur-xs rounded-2xl p-5 md:p-6 border border-[rgba(66,126,138,0.18)] shadow-xs hover:border-[#176B87]/30 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 flex items-start gap-4 overflow-hidden group/edu">
                     {/* Subtle iridescent corner reflection */}
                     <div
                       className="absolute -top-12 -right-12 w-28 h-28 bg-gradient-to-bl from-[#A9D8F2]/30 via-transparent to-transparent rounded-full opacity-0 group-hover/edu:opacity-100 transition-opacity duration-500 pointer-events-none"
@@ -129,15 +128,14 @@ export const AboutSection: React.FC = () => {
                     />
 
                     <div
-                      className="w-10 h-10 rounded-xl bg-[#D7EAF0]/70 flex items-center justify-center shrink-0 mt-0.5 text-[#176B87] shadow-2xs group-hover/edu:bg-[#176B87] group-hover/edu:text-white transition-colors duration-300"
-                      data-magnetic="true"
+                      className="w-10 h-10 rounded-xl bg-[#D7EAF0]/80 flex items-center justify-center shrink-0 mt-0.5 text-[#176B87] shadow-2xs border border-[#176B87]/15 transition-transform duration-300 group-hover/edu:scale-105"
                     >
                       {getEducationIcon(idx)}
                     </div>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
-                        <h4 className="font-serif text-base md:text-lg font-bold text-[#183B4E] group-hover/edu:text-[#176B87] transition-colors">
+                        <h4 className="font-serif text-base md:text-lg font-bold text-[#183B4E] transition-colors">
                           {item.institution}
                         </h4>
                         <span className="text-xs text-[#526779] font-medium bg-[#FCF9F7] px-2.5 py-0.5 rounded-full border border-[rgba(66,126,138,0.14)]">
@@ -157,7 +155,7 @@ export const AboutSection: React.FC = () => {
 
                       {item.badge && (
                         <div className="mt-2.5">
-                          <Chip variant="neutral" size="sm" data-magnetic="true">
+                          <Chip variant="neutral" size="sm">
                             {item.badge}
                           </Chip>
                         </div>

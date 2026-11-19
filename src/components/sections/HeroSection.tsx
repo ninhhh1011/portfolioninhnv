@@ -22,7 +22,7 @@ export const HeroSection: React.FC = () => {
   };
 
   return (
-    <section className="relative pt-20 sm:pt-24 md:pt-28 pb-12 md:pb-16 px-4 overflow-hidden isolate">
+    <section id="hero" className="relative pt-20 sm:pt-24 md:pt-28 pb-12 md:pb-16 px-4 overflow-hidden isolate">
       {/* 1. Terminal / Code Backdrop with Video & Cursor Reveal Lens */}
       <TerminalCodeBackdrop enableLens={true} />
 

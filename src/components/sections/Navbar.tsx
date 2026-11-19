@@ -1,191 +1,180 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { FileText, Send } from "lucide-react";
-import { Button } from "@/components/ui/Button";
-import { MobileNavDrawer } from "@/components/ui/MobileNavDrawer";
+import React, { useState, useEffect } from "react";
+import { FileText } from "lucide-react";
 import { CvModal } from "@/components/ui/CvModal";
+import { LiquidNavbar, NimbusIcons, type LiquidNavItem } from "@/components/ui/liquid-glass-navbar";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { useActiveSection } from "@/hooks/useActiveSection";
-import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
 
 export const Navbar: React.FC = () => {
-  const navLinks = [
-    { label: "Dự án", href: "#projects" },
-    { label: "Kinh nghiệm", href: "#experience" },
-    { label: "Năng lực", href: "#skills" },
-    { label: "Giới thiệu", href: "#about" },
-  ];
-
   const scrollProgress = useScrollProgress();
-  const activeSection = useActiveSection(["#projects", "#experience", "#skills", "#about"]);
-  const prefersReduced = useReducedMotionSafe();
+  const activeSection = useActiveSection([
+    "#hero",
+    "#projects",
+    "#experience",
+    "#skills",
+    "#about",
+    "#contact",
+  ]);
 
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isCvOpen, setIsCvOpen] = useState(false);
-  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+  const [manualActive, setManualActive] = useState<number | null>(null);
 
+  // Map active section IDs to navigation item indices:
+  // 0: Ninh. (Trang chủ / Hero)
+  // 1: Dự án
+  // 2: Kinh nghiệm
+  // 3: Năng lực
+  // 4: Giới thiệu
+  // 5: Liên hệ
+  // 6: Xem CV (Action Item)
+  const sectionIndexMap: Record<string, number> = {
+    hero: 0,
+    projects: 1,
+    experience: 2,
+    skills: 3,
+    about: 4,
+    contact: 5,
+  };
+
+  // When scroll changes activeSection naturally, clear manual override
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    setManualActive(null);
+  }, [activeSection]);
 
-  // Magnetic CTA for desktop
-  const ctaRef = useRef<HTMLDivElement>(null);
-  const [ctaOffset, setCtaOffset] = useState({ x: 0, y: 0 });
+  const activeIndex = manualActive ?? (sectionIndexMap[activeSection] ?? 0);
 
-  const handleCtaPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (prefersReduced) return;
-    const isFinePointer = window.matchMedia("(pointer: fine)").matches;
-    if (!isFinePointer || !ctaRef.current) return;
-
-    const rect = ctaRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const deltaX = (e.clientX - centerX) * 0.2;
-    const deltaY = (e.clientY - centerY) * 0.2;
-
-    setCtaOffset({
-      x: Math.max(-4, Math.min(4, deltaX)),
-      y: Math.max(-4, Math.min(4, deltaY)),
-    });
-  };
-
-  const handleCtaPointerLeave = () => {
-    setCtaOffset({ x: 0, y: 0 });
-  };
-
-  const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleScrollTo = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
+    if (href === "#hero" || href === "#") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
     const elem = document.querySelector(href);
     if (elem) {
       elem.scrollIntoView({ behavior: "smooth" });
     }
   };
 
+  const navItems: LiquidNavItem[] = [
+    {
+      label: (
+        <span className="font-serif font-bold text-[15px] text-[#183B4E] tracking-tight">
+          Ninh<span className="text-[#176B87]">.</span>
+        </span>
+      ),
+      textLabel: "Ninh",
+      href: "#hero",
+      icon: NimbusIcons.home,
+      fx: "glow",
+      onClick: (e) => handleScrollTo(e, "#hero"),
+    },
+    {
+      label: "Dự án",
+      href: "#projects",
+      icon: NimbusIcons.globe,
+      fx: "spin",
+      onClick: (e) => handleScrollTo(e, "#projects"),
+    },
+    {
+      label: "Kinh nghiệm",
+      href: "#experience",
+      icon: NimbusIcons.plane,
+      fx: "plane",
+      onClick: (e) => handleScrollTo(e, "#experience"),
+    },
+    {
+      label: "Năng lực",
+      href: "#skills",
+      icon: NimbusIcons.drop,
+      fx: "drop",
+      onClick: (e) => handleScrollTo(e, "#skills"),
+    },
+    {
+      label: "Giới thiệu",
+      href: "#about",
+      icon: NimbusIcons.user,
+      fx: "wave",
+      onClick: (e) => handleScrollTo(e, "#about"),
+    },
+    {
+      label: "Liên hệ",
+      href: "#contact",
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z" />
+        </svg>
+      ),
+      fx: "pop",
+      onClick: (e) => handleScrollTo(e, "#contact"),
+    },
+    {
+      label: (
+        <span className="font-semibold text-[#176B87]">Xem CV</span>
+      ),
+      textLabel: "Xem CV",
+      icon: <FileText className="w-4 h-4 text-[#176B87]" />,
+      fx: "pop",
+      onClick: (e) => {
+        e.preventDefault();
+        setIsCvOpen(true);
+      },
+    },
+  ];
+
   return (
     <>
-      <header className="fixed top-3 sm:top-4 md:top-5 left-0 right-0 z-40 flex justify-center px-4 pointer-events-none transition-all duration-400">
-        <nav
-          className={`pointer-events-auto relative flex items-center justify-between gap-3 md:gap-6 px-4 md:px-6 rounded-full border transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden ${
-            isScrolled
-              ? "py-1.5 max-w-3xl w-full bg-white/94 backdrop-blur-xl shadow-[0_16px_40px_rgba(24,59,78,0.12)] border-[rgba(23,107,135,0.25)] scale-[0.99]"
-              : "py-2.5 max-w-4xl w-full bg-white/85 backdrop-blur-md shadow-[0_8px_30px_rgba(24,59,78,0.06)] border-[rgba(66,126,138,0.2)] scale-100"
-          }`}
-        >
-          {/* Brand wordmark */}
-          <a
-            href="#"
-            data-magnetic="true"
-            className="font-serif text-xl md:text-2xl font-bold tracking-tight text-[#183B4E] hover:text-[#176B87] transition-colors"
-          >
-            Ninh<span className="text-[#176B87] animate-pulse">.</span>
-          </a>
+      {/* Ultra-slim Scroll Progress Line at very top of screen */}
+      <div
+        className="fixed top-0 left-0 right-0 h-[2.5px] bg-[rgba(66,126,138,0.12)] pointer-events-none z-50"
+        aria-hidden="true"
+      >
+        <div
+          className="h-full bg-gradient-to-r from-[#176B87] via-[#64B5F6] to-[#10B981] shadow-[0_0_8px_rgba(23,107,135,0.7)] transition-all duration-150 ease-out"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
 
-          {/* Desktop Links with Sliding Magnetic Spotlight Indicator */}
-          <ul
-            className="hidden md:flex items-center gap-1 lg:gap-1.5 text-sm font-medium text-[#183B4E] relative"
-            onMouseLeave={() => setHoveredLink(null)}
-          >
-            {navLinks.map((link) => {
-              const isActive = activeSection === link.href.replace("#", "");
-              const isHovered = hoveredLink === link.href;
-
-              return (
-                <li key={link.href} className="relative">
-                  <a
-                    href={link.href}
-                    onClick={(e) => handleScrollTo(e, link.href)}
-                    onMouseEnter={() => setHoveredLink(link.href)}
-                    data-magnetic="true"
-                    className={`relative z-10 px-3.5 py-1.5 rounded-full text-xs lg:text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                      isActive
-                        ? "text-[#176B87] font-semibold"
-                        : isHovered
-                        ? "text-[#183B4E]"
-                        : "text-[#526779]"
-                    }`}
-                  >
-                    {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#176B87] animate-ping" />}
-                    <span>{link.label}</span>
-                  </a>
-
-                  {/* Active / Hover spotlight background pill */}
-                  {(isActive || isHovered) && (
-                    <span
-                      className={`absolute inset-0 rounded-full transition-all duration-300 pointer-events-none ${
-                        isActive
-                          ? "bg-[#D7EAF0] shadow-2xs border border-[rgba(23,107,135,0.2)]"
-                          : "bg-[#F3F1EE]/90"
-                      }`}
-                      aria-hidden="true"
-                    />
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-
-          {/* CTA Buttons & Mobile Menu */}
-          <div className="flex items-center gap-2">
-            {/* Quick-view CV Button */}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsCvOpen(true)}
-              className="text-xs px-3 py-1.5 h-8 gap-1.5 border-[#176B87]/30 text-[#176B87] hover:bg-[#D7EAF0]/40 font-semibold"
-              data-magnetic="true"
-            >
-              <FileText className="w-3.5 h-3.5 text-[#176B87]" />
-              <span>Xem CV</span>
-            </Button>
-
-            {/* Magnetic Contact Button */}
-            <div
-              ref={ctaRef}
-              onPointerMove={handleCtaPointerMove}
-              onPointerLeave={handleCtaPointerLeave}
-              data-magnetic="true"
-              style={{
-                transform: `translate3d(${ctaOffset.x}px, ${ctaOffset.y}px, 0)`,
-                transition: ctaOffset.x === 0 ? "transform 300ms ease-out" : "none",
-              }}
-            >
-              <Button
-                variant="primary"
-                size="sm"
-                href="#contact"
-                onClick={(e: any) => handleScrollTo(e, "#contact")}
-                className="hidden sm:inline-flex text-xs px-3.5 py-1.5 h-8 gap-1.5"
-              >
-                <Send className="w-3 h-3" />
-                <span>Liên hệ</span>
-              </Button>
-            </div>
-
-            {/* Mobile Drawer */}
-            <MobileNavDrawer navLinks={navLinks} contactHref="#contact" />
-          </div>
-
-          {/* Integrated Ultra-slim Scroll Progress Line at Lower Edge (2px, #176B87 with glow) */}
-          <div
-            className="absolute bottom-0 left-0 right-0 h-[2px] bg-[rgba(66,126,138,0.1)] pointer-events-none"
-            aria-hidden="true"
-          >
-            <div
-              className="h-full bg-gradient-to-r from-[#176B87] via-[#64B5F6] to-[#10B981] shadow-[0_0_10px_rgba(23,107,135,0.8)] transition-all duration-150 ease-out"
-              style={{ width: `${scrollProgress}%` }}
-            />
-          </div>
-        </nav>
+      {/* Floating Liquid Navbar Container with all items unified */}
+      <header className="fixed top-3 sm:top-4 md:top-5 left-0 right-0 z-40 flex items-center justify-center px-2 sm:px-4 pointer-events-none transition-all duration-300">
+        <div className="pointer-events-auto flex items-center justify-center">
+          <LiquidNavbar
+            items={navItems}
+            active={activeIndex}
+            onChange={(idx) => {
+              if (idx === 6) {
+                // If Xem CV is clicked, trigger modal and keep visual feedback
+                setIsCvOpen(true);
+              }
+              setManualActive(idx);
+            }}
+            tone="light"
+            sound={true}
+            className="shadow-[0_16px_40px_-12px_rgba(24,59,78,0.22)]"
+          />
+        </div>
       </header>
 
       {/* CV Modal */}
-      <CvModal isOpen={isCvOpen} onClose={() => setIsCvOpen(false)} />
+      <CvModal
+        isOpen={isCvOpen}
+        onClose={() => {
+          setIsCvOpen(false);
+          // Return droplet to current section if it was on "Xem CV"
+          setManualActive(null);
+        }}
+      />
     </>
   );
 };

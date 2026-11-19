@@ -26,28 +26,28 @@ export const SpotlightSurface: React.FC<SpotlightSurfaceProps> = ({
   const getSpotlightGradient = () => {
     switch (variant) {
       case "teal":
-        return `radial-gradient(${spotlightSize}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(66, 126, 138, 0.14), transparent 80%)`;
+        return `radial-gradient(${spotlightSize}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(66, 126, 138, 0.08), transparent 80%)`;
       case "lavender":
-        return `radial-gradient(${spotlightSize}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(238, 231, 250, 0.4), transparent 80%)`;
+        return `radial-gradient(${spotlightSize}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(238, 231, 250, 0.25), transparent 80%)`;
       case "subtle":
-        return `radial-gradient(${spotlightSize}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(215, 234, 240, 0.2), transparent 80%)`;
+        return `radial-gradient(${spotlightSize}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(215, 234, 240, 0.12), transparent 80%)`;
       case "sky":
       default:
-        return `radial-gradient(${spotlightSize}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(169, 216, 242, 0.25), transparent 80%)`;
+        return `radial-gradient(${spotlightSize}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(169, 216, 242, 0.15), transparent 80%)`;
     }
   };
 
   const getBorderShineGradient = () => {
     switch (variant) {
       case "teal":
-        return `radial-gradient(${spotlightSize * 0.8}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(34, 84, 61, 0.45), rgba(167, 243, 208, 0.25) 40%, transparent 75%)`;
+        return `radial-gradient(${spotlightSize * 0.8}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(23, 107, 135, 0.22), rgba(169, 216, 242, 0.12) 40%, transparent 75%)`;
       case "lavender":
-        return `radial-gradient(${spotlightSize * 0.8}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(85, 60, 154, 0.45), rgba(214, 188, 250, 0.25) 40%, transparent 75%)`;
+        return `radial-gradient(${spotlightSize * 0.8}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(85, 60, 154, 0.25), rgba(214, 188, 250, 0.15) 40%, transparent 75%)`;
       case "subtle":
-        return `radial-gradient(${spotlightSize * 0.8}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(23, 107, 135, 0.35), rgba(215, 234, 240, 0.2) 40%, transparent 75%)`;
+        return `radial-gradient(${spotlightSize * 0.8}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(23, 107, 135, 0.2), rgba(215, 234, 240, 0.1) 40%, transparent 75%)`;
       case "sky":
       default:
-        return `radial-gradient(${spotlightSize * 0.8}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(23, 107, 135, 0.5), rgba(169, 216, 242, 0.3) 40%, transparent 75%)`;
+        return `radial-gradient(${spotlightSize * 0.8}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(23, 107, 135, 0.25), rgba(169, 216, 242, 0.15) 40%, transparent 75%)`;
     }
   };
 

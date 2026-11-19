@@ -83,17 +83,16 @@ export const SkillsSection: React.FC = () => {
             >
               <Card
                 hoverable
-                className="p-6 md:p-8 flex flex-col justify-between h-full border-[rgba(66,126,138,0.22)] shadow-[0_10px_35px_rgba(24,59,78,0.06)] hover:shadow-[0_20px_50px_rgba(24,59,78,0.12)] transition-all duration-300 hover:-translate-y-1.5 bg-white/95 backdrop-blur-xs"
+                className="p-6 md:p-8 flex flex-col justify-between h-full border-[rgba(66,126,138,0.22)] shadow-[0_10px_35px_rgba(24,59,78,0.06)] hover:shadow-[0_14px_35px_rgba(24,59,78,0.08)] transition-all duration-300 hover:-translate-y-0.5 bg-white/95 backdrop-blur-xs"
               >
                 <div>
                   <CardHeader>
                     <div
-                      className="w-11 h-11 rounded-2xl bg-[#D7EAF0] flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 shadow-2xs group-hover:bg-[#176B87] group-hover:text-white"
-                      data-magnetic="true"
+                      className="w-11 h-11 rounded-2xl bg-[#D7EAF0]/80 text-[#176B87] flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-105 shadow-2xs border border-[#176B87]/15"
                     >
                       {getCategoryIcon(index)}
                     </div>
-                    <CardTitle className="text-xl md:text-2xl group-hover:text-[#176B87] transition-colors">
+                    <CardTitle className="text-xl md:text-2xl text-[#183B4E] transition-colors">
                       {cat.title}
                     </CardTitle>
                     <CardDescription className="text-xs md:text-sm mt-1.5 leading-relaxed">

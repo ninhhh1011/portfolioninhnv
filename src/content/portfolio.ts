@@ -43,7 +43,7 @@ export interface ProjectItem {
   technologies: string[];
   demoUrl?: string;
   githubUrl?: string;
-  previewType: "smart-parking" | "chess";
+  previewType: "smart-parking" | "chess" | "project";
   isProprietary?: boolean;
   proprietaryNotice?: string;
 }
@@ -73,12 +73,12 @@ export const portfolioData: {
   profile: {
     name: "Nguyễn Văn Ninh",
     shortName: "Ninh.",
-    role: "Software Engineering Student | Backend · AI Applications · Frontend",
+    role: "Software Engineering Student | Fullstack · Backend · AI Applications",
     eyebrow: "Nguyễn Văn Ninh · Hà Nội, Việt Nam",
     headline: "Từ ý tưởng đến sản phẩm có thể trải nghiệm.",
     description:
-      "Tôi là sinh viên Kỹ thuật Phần mềm, xây dựng backend, ứng dụng AI và giao diện web — với sự chú trọng vào luồng sử dụng, tích hợp và kiểm thử.",
-    specializations: ["Backend", "AI Applications", "Frontend"],
+      "Tôi là sinh viên Kỹ thuật Phần mềm, xây dựng ứng dụng web, API và hệ thống AI; đồng thời dẫn dắt kỹ thuật và sản phẩm cho dự án HaUI Advisor.",
+    specializations: ["Fullstack", "Backend", "AI Applications"],
     location: "Hà Nội, Việt Nam",
     email: "nguyenninh10112006@gmail.com",
     github: "https://github.com/ninhhh1011",
@@ -119,13 +119,14 @@ export const portfolioData: {
       id: "vinsmartfuture",
       company: "VinSmartFuture (Green SM)",
       brand: "Green SM",
-      role: "Backend / AI Systems Intern",
+      role: "Fullstack / AI Systems Intern",
       period: "2026",
       bullets: [
-        "Triển khai độc lập backend gợi ý trạm sạc/tủ đổi pin: GPS realtime, map matching, xác định nhu cầu, lọc trạm và REST API với Python, FastAPI, PostGIS và OSRM.",
-        "Định tuyến tài xế → trạm → điểm đến, tính ETA/detour và xếp hạng trạm hợp lệ; xây test/replay và công cụ debug trên dữ liệu mô phỏng.",
+        "Phát triển hệ thống nội bộ gợi ý trạm sạc/đổi pin, kết hợp GPS, định tuyến nhiều chặng và xếp hạng theo thời gian, năng lượng và dữ liệu lịch sử.",
+        "Phát hiện lệch tuyến với chỉ mục không gian H3; đồng bộ GPS giữa các API replica bằng Redis và xử lý dữ liệu thiếu, trạng thái trạm thay đổi.",
+        "Xây dựng Driver HUD với Leaflet/Canvas và kiểm thử replay trên Docker Compose. Dự án nội bộ, không công khai website hoặc mã nguồn.",
       ],
-      technologies: ["Python", "FastAPI", "PostGIS", "OSRM", "GPS Realtime", "REST API"],
+      technologies: ["Python", "FastAPI", "GraphHopper", "PostgreSQL / PostGIS", "Redis", "Docker"],
       isInternship: true,
     },
     {
@@ -143,6 +144,61 @@ export const portfolioData: {
   ],
   projects: [
     {
+      id: "haui-advisor",
+      title: "HaUI Advisor",
+      subtitle: "Tech Lead · Product/Project Manager · AI Engineer",
+      type: "Dự án nhóm",
+      year: "2026",
+      description: "Trợ lý học vụ hỗ trợ tra cứu quy định, tư vấn lộ trình và lập kế hoạch học tập theo hồ sơ sinh viên.",
+      bullets: ["Điều phối kỹ thuật và sản phẩm trong kiến trúc modular gồm AI/RAG, Web, Planner, Academic Rules và Platform.", "Phối hợp giữa các module qua API contracts; kiểm tra ranh giới module và hợp đồng API."],
+      technologies: ["Spring Boot", "Java", "React", "PostgreSQL / pgvector", "OpenAPI", "Docker"],
+      githubUrl: "https://github.com/netrotion/QUAN-LY-HOC-TAP-TTCSN",
+      previewType: "project",
+    },
+    {
+      id: "techviz",
+      title: "TechViz Sandbox",
+      subtitle: "Nền tảng trực quan hóa tương tác | Dự án cá nhân",
+      type: "Dự án cá nhân",
+      year: "2026",
+      description: "Nền tảng trực quan hóa thuật toán, cấu trúc dữ liệu và các khái niệm khoa học máy tính.",
+      bullets: ["Xây dựng 11 kịch bản, playback từng bước và kiến trúc renderer DOM/SVG có thể mở rộng.", "Kiểm chứng kịch bản, nhận diện nội dung chưa được hỗ trợ hoặc xác minh và kiểm thử Playwright."],
+      technologies: ["DOM / SVG", "Playwright"],
+      demoUrl: "https://techvizbyninhnv.pages.dev/",
+      githubUrl: "https://github.com/ninhhh1011/techvizbyninhnv",
+      previewType: "project",
+    },
+    {
+      id: "chess-web-app",
+      title: "Chess Web App",
+      subtitle: "Frontend & AI Coach | Dự án cá nhân",
+      type: "Dự án cá nhân",
+      year: "2026",
+      description:
+        "Ứng dụng chơi và học cờ với Stockfish, phân tích ván đấu và trợ lý AI Coach.",
+      bullets: [
+        "Chơi với Stockfish WASM, phân tích ván PGN và luyện tập với bộ bài tập Lichess CC0.",
+        "AI Coach sử dụng ngữ cảnh FEN và trình độ người chơi, với hướng dẫn cơ bản khi LLM không khả dụng; kiểm thử unit, integration và E2E.",
+      ],
+      technologies: ["React", "Vite", "TypeScript", "Tailwind CSS", "Supabase", "Stockfish"],
+      demoUrl: "https://chess-brown-two.vercel.app/",
+      githubUrl: "https://github.com/ninhhh1011/chess",
+      previewType: "chess",
+    },
+    {
+      id: "portfolio",
+      title: "Portfolio cá nhân",
+      subtitle: "Frontend Engineering · UI/UX | Dự án cá nhân",
+      type: "Dự án cá nhân",
+      year: "2026",
+      description: "Website portfolio tương tác giới thiệu dự án, kinh nghiệm và năng lực kỹ thuật.",
+      bullets: ["Thiết kế giao diện theo component với video nền, cursor-reveal, bàn làm việc tương tác và minh họa dự án.", "Kiểm thử điều hướng, modal và giao diện mobile bằng Playwright."],
+      technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Playwright"],
+      demoUrl: "https://portfolioninhnv.vercel.app/",
+      githubUrl: "https://github.com/ninhhh1011/portfolioninhnv",
+      previewType: "project",
+    },
+    {
       id: "smart-parking",
       title: "SmartParking",
       subtitle: "Frontend / UI Flow | Dự án nhóm tại VinUni",
@@ -158,41 +214,24 @@ export const portfolioData: {
       previewType: "smart-parking",
       isProprietary: true,
       proprietaryNotice:
-        "Mã nguồn và hệ thống thuộc quyền sở hữu trí tuệ của VinUni. Bản demo và repo được bảo mật theo quy định nội bộ.",
-    },
-    {
-      id: "chess-web-app",
-      title: "Chess Web App",
-      subtitle: "Frontend & AI Coach | Dự án cá nhân",
-      type: "Dự án cá nhân",
-      year: "2026",
-      description:
-        "Ứng dụng chơi cờ vua tương tác với bot, lưu ván đấu, phân tích nước đi và tích hợp trợ lý huấn luyện cờ RAG.",
-      bullets: [
-        "Xây ứng dụng chơi cờ với bot, lịch sử và phân tích ván; tích hợp trợ lý RAG.",
-        "TypeScript strict toàn diện, quản lý request Stockfish và kiểm thử tự động.",
-      ],
-      technologies: ["React", "Vite", "TypeScript", "Tailwind CSS", "Supabase", "Stockfish"],
-      demoUrl: "https://chess-brown-two.vercel.app/",
-      githubUrl: "https://github.com/ninhhh1011/chess",
-      previewType: "chess",
+        "Dự án thuộc quyền sở hữu của Vin; website và mã nguồn không công khai.",
     },
   ],
   skillCategories: [
     {
       title: "Backend & Dữ liệu",
       description: "Xây dựng hệ thống dịch vụ, xử lý định tuyến và cơ sở dữ liệu không gian.",
-      skills: ["FastAPI", "Python", "REST API", "PostgreSQL / PostGIS", "Supabase", "OpenStreetMap", "OSRM"],
+      skills: ["FastAPI", "Python", "REST API", "PostgreSQL / PostGIS", "Supabase", "Redis", "GraphHopper"],
     },
     {
       title: "Frontend & Trải nghiệm",
       description: "Giao diện hiện đại, responsive, đa ngôn ngữ và chuẩn hóa accessibility.",
-      skills: ["React", "Next.js", "Vite", "Tailwind CSS", "i18n (VI/EN)", "Design Tokens", "Accessibility"],
+      skills: ["React", "Next.js", "Vite", "TypeScript", "Tailwind CSS", "i18n (VI/EN)", "Design Tokens", "Accessibility"],
     },
     {
       title: "Công cụ & Chất lượng",
       description: "Đảm bảo chất lượng mã nguồn, kiểm thử tự động và quy trình triển khai.",
-      skills: ["Git / GitHub", "Docker", "Vercel", "Kiểm thử tự động", "Typecheck / Lint", "Visual QA", "Data Validation"],
+      skills: ["Git / GitHub", "Docker", "Vercel", "Playwright", "Kiểm thử tự động", "Typecheck / Lint", "Visual QA", "Data Validation"],
     },
   ],
   aiPractices: [

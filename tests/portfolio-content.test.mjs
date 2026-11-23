@@ -1,0 +1,13 @@
+﻿import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import ts from 'typescript';
+import vm from 'node:vm';
+const source = fs.readFileSync('src/content/portfolio.ts', 'utf8');
+const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
+const context = { exports: {} };
+vm.runInNewContext(js, context);
+const { projects } = context.exports.portfolioData;
+assert.equal(Array.from(projects, p => p.id).join(','), 'haui-advisor,techviz,chess-web-app,portfolio,smart-parking');
+assert.ok(projects.slice(0, 4).every(p => p.githubUrl));
+assert.ok(projects[4].isProprietary);
+console.log('Portfolio project content verified');

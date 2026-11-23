@@ -9,10 +9,11 @@ import { ProjectModal } from "@/components/ui/ProjectModal";
 import { GithubIcon } from "@/components/ui/Icons";
 import { SmartParkingIllustration } from "@/components/visuals/SmartParkingIllustration";
 import { ChessIllustration } from "@/components/visuals/ChessIllustration";
+import { ProjectIllustration } from "@/components/visuals/ProjectIllustration";
 import { ProjectItem } from "@/content/portfolio";
 import { SpotlightSurface } from "@/components/ui/SpotlightSurface";
 import { HolographicTiltCard } from "@/components/ui/HolographicTiltCard";
-import { usePortfolioInteraction, ProjectContextType } from "@/context/PortfolioInteractionContext";
+import { usePortfolioInteraction } from "@/context/PortfolioInteractionContext";
 
 interface ProjectCardProps {
   project: ProjectItem;
@@ -38,7 +39,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         variant={isEven ? "sky" : "lavender"}
         className="rounded-3xl"
         onMouseEnter={() => {
-          if (isActive) setActiveProject(project.id as ProjectContextType);
+          if (isActive) setActiveProject(project.previewType === "chess" ? "chess" : project.previewType === "smart-parking" ? "smart-parking" : "none");
         }}
         onMouseLeave={() => setActiveProject("none")}
       >
@@ -59,8 +60,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               >
                 {project.previewType === "smart-parking" ? (
                   <SmartParkingIllustration />
-                ) : (
+                ) : project.previewType === "chess" ? (
                   <ChessIllustration />
+                ) : (
+                  <ProjectIllustration projectId={project.id} />
                 )}
               </div>
 

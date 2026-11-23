@@ -260,12 +260,12 @@ body {
     transform: scale(1) translateY(0);
   }
   50% {
-    transform: scale(1.008, 1.014) translateY(-1.5px);
+    transform: scale(1.003, 1.006) translateY(-2px);
   }
 }
 
 .anim-chibi-breathe {
-  animation: chibiBreathing 3.8s ease-in-out infinite;
+  animation: chibiBreathing 5s ease-in-out infinite;
   transform-origin: bottom center;
 }
 
@@ -430,4 +430,36 @@ body {
     transform: none !important;
     filter: none !important;
   }
+}
+
+/* The cards pass in front of and behind the desk on an elliptical orbit. */
+.orbit-scene { min-height: 440px; --orbit-x: min(35vw, 420px); --orbit-y: 145px; }
+.project-orbit { position: absolute; inset: 0; pointer-events: none; }
+.orbit-card { position: absolute; left: 50%; top: 50%; display: flex; align-items: center; gap: 8px; width: 200px; padding: 10px; border: 1px solid rgba(66,126,138,.22); border-radius: 16px; background: rgba(255,255,255,.95); box-shadow: 0 12px 30px rgba(24,59,78,.12); animation: projectOrbit 20s linear infinite; }
+.orbit-card-icon { display: grid; place-items: center; width: 36px; height: 36px; flex-shrink: 0; border-radius: 12px; background: #edf5f7; }
+.orbit-card-2 { animation-delay: -4s; }
+.orbit-card-3 { animation-delay: -8s; }
+.orbit-card-4 { animation-delay: -12s; }
+.orbit-card-5 { animation-delay: -16s; }
+@keyframes projectOrbit {
+  0%, 100% { transform: translate(-50%, -50%) translate(var(--orbit-x), 0) scale(.85); z-index: 11; opacity: .9; }
+  25% { transform: translate(-50%, -50%) translate(0, var(--orbit-y)) scale(1); z-index: 11; opacity: 1; }
+  50% { transform: translate(-50%, -50%) translate(calc(-1 * var(--orbit-x)), 0) scale(.85); z-index: 0; opacity: .9; }
+  75% { transform: translate(-50%, -50%) translate(0, calc(-1 * var(--orbit-y))) scale(.7); z-index: 0; opacity: .7; }
+}
+@media (min-width: 1024px) { .orbit-scene { min-height: 620px; --orbit-y: 205px; } }
+@media (max-width: 640px) {
+  .orbit-scene { min-height: 470px; --orbit-x: 29vw; --orbit-y: 200px; }
+  .orbit-card { width: 145px; gap: 5px; padding: 7px; }
+  .orbit-card-icon { width: 28px; height: 28px; }
+  .orbit-card-icon svg { width: 16px; height: 16px; }
+  .orbit-card span span { font-size: 9px; line-height: 1.2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orbit-card { animation: none; z-index: 11; }
+  .orbit-card-1 { transform: translate(-50%, -50%) translate(var(--orbit-x), 0) scale(.85); }
+  .orbit-card-2 { transform: translate(-50%, -50%) translate(0, var(--orbit-y)) scale(.9); }
+  .orbit-card-3 { transform: translate(-50%, -50%) translate(calc(-1 * var(--orbit-x)), 0) scale(.85); }
+  .orbit-card-4 { transform: translate(-50%, -50%) translate(calc(var(--orbit-x) * -.6), calc(var(--orbit-y) * -.85)) scale(.75); }
+  .orbit-card-5 { transform: translate(-50%, -50%) translate(calc(var(--orbit-x) * .6), calc(var(--orbit-y) * -.85)) scale(.75); }
 }

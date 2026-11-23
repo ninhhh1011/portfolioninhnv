@@ -7,16 +7,19 @@ import { LiquidNavbar, NimbusIcons, type LiquidNavItem } from "@/components/ui/l
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { useActiveSection } from "@/hooks/useActiveSection";
 
-export const Navbar: React.FC = () => {
+const sectionIds = ["#hero", "#projects", "#experience", "#skills", "#about", "#contact"];
+
+function ScrollProgress() {
   const scrollProgress = useScrollProgress();
-  const activeSection = useActiveSection([
-    "#hero",
-    "#projects",
-    "#experience",
-    "#skills",
-    "#about",
-    "#contact",
-  ]);
+  return (
+    <div className="fixed top-0 left-0 right-0 h-[2.5px] bg-[rgba(66,126,138,0.12)] pointer-events-none z-50" aria-hidden="true">
+      <div className="h-full bg-gradient-to-r from-[#176B87] via-[#64B5F6] to-[#10B981] shadow-[0_0_8px_rgba(23,107,135,0.7)] transition-all duration-150 ease-out" style={{ width: `${scrollProgress}%` }} />
+    </div>
+  );
+}
+
+export const Navbar: React.FC = () => {
+  const activeSection = useActiveSection(sectionIds);
 
   const [isCvOpen, setIsCvOpen] = useState(false);
   const [manualActive, setManualActive] = useState<number | null>(null);
@@ -38,10 +41,21 @@ export const Navbar: React.FC = () => {
     contact: 5,
   };
 
-  // When scroll changes activeSection naturally, clear manual override
   useEffect(() => {
-    setManualActive(null);
-  }, [activeSection]);
+    if (manualActive !== null && manualActive < sectionIds.length && sectionIds[manualActive] === `#${activeSection}`) {
+      setManualActive(null);
+    }
+  }, [activeSection, manualActive]);
+
+  useEffect(() => {
+    const cancelNavigation = () => setManualActive((current) => current === 6 ? current : null);
+    window.addEventListener("wheel", cancelNavigation, { passive: true });
+    window.addEventListener("touchstart", cancelNavigation, { passive: true });
+    return () => {
+      window.removeEventListener("wheel", cancelNavigation);
+      window.removeEventListener("touchstart", cancelNavigation);
+    };
+  }, []);
 
   const activeIndex = manualActive ?? (sectionIndexMap[activeSection] ?? 0);
 
@@ -136,15 +150,7 @@ export const Navbar: React.FC = () => {
   return (
     <>
       {/* Ultra-slim Scroll Progress Line at very top of screen */}
-      <div
-        className="fixed top-0 left-0 right-0 h-[2.5px] bg-[rgba(66,126,138,0.12)] pointer-events-none z-50"
-        aria-hidden="true"
-      >
-        <div
-          className="h-full bg-gradient-to-r from-[#176B87] via-[#64B5F6] to-[#10B981] shadow-[0_0_8px_rgba(23,107,135,0.7)] transition-all duration-150 ease-out"
-          style={{ width: `${scrollProgress}%` }}
-        />
-      </div>
+      <ScrollProgress />
 
       {/* Floating Liquid Navbar Container with all items unified */}
       <header className="fixed top-3 sm:top-4 md:top-5 left-0 right-0 z-40 flex items-center justify-center px-2 sm:px-4 pointer-events-none transition-all duration-300">

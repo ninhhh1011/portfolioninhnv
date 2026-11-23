@@ -2,6 +2,8 @@
 
 import React, { useEffect, useRef } from "react";
 import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
+import { useSectionInView } from "@/hooks/useSectionInView";
+import { useDocumentVisibility } from "@/hooks/useDocumentVisibility";
 
 interface Star {
   x: number;
@@ -21,13 +23,14 @@ export const StarlightCanvas: React.FC<{ className?: string }> = ({
   className = "",
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const { ref: containerRef, isInView } = useSectionInView<HTMLDivElement>({ triggerOnce: false, rootMargin: "0px" });
   const prefersReduced = useReducedMotionSafe();
+  const visible = useDocumentVisibility();
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
-    if (!canvas || !container) return;
+    if (!canvas || !container || !isInView || !visible) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -66,6 +69,7 @@ export const StarlightCanvas: React.FC<{ className?: string }> = ({
       if (!canvas || !container) return;
       width = canvas.width = container.clientWidth;
       height = canvas.height = container.clientHeight;
+      if (prefersReduced) render();
     };
 
     const handlePointerMove = (e: PointerEvent) => {
@@ -86,7 +90,7 @@ export const StarlightCanvas: React.FC<{ className?: string }> = ({
 
       for (let i = 0; i < stars.length; i++) {
         const s = stars[i];
-        s.phase += s.twinkleSpeed;
+        if (!prefersReduced) s.phase += s.twinkleSpeed;
         const currentAlpha = Math.max(
           0.1,
           s.baseAlpha + Math.sin(s.phase) * 0.25
@@ -123,10 +127,10 @@ export const StarlightCanvas: React.FC<{ className?: string }> = ({
         ctx.restore();
       }
 
-      animId = requestAnimationFrame(render);
+      if (!prefersReduced) animId = requestAnimationFrame(render);
     };
 
-    animId = requestAnimationFrame(render);
+    render();
 
     window.addEventListener("resize", handleResize);
     container.addEventListener("pointermove", handlePointerMove, { passive: true });
@@ -138,7 +142,7 @@ export const StarlightCanvas: React.FC<{ className?: string }> = ({
       container.removeEventListener("pointerleave", handlePointerLeave);
       cancelAnimationFrame(animId);
     };
-  }, [prefersReduced]);
+  }, [prefersReduced, isInView, visible, containerRef]);
 
   return (
     <div

@@ -97,7 +97,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
               {profile.name}
             </h1>
             <p className="text-xs md:text-sm text-[#176B87] font-semibold mt-1">
-              Backend · AI Applications · Frontend Developer
+              {profile.role}
             </p>
             <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-[#526779] mt-2.5">
               <span className="flex items-center gap-1">
@@ -232,22 +232,12 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
               KỸ NĂNG KỸ THUẬT
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#526779]">
-              <div>
-                <strong className="text-[#183B4E]">Backend & Databases:</strong> Python, FastAPI,
-                PostgreSQL, PostGIS, Redis, OSRM, REST API.
-              </div>
-              <div>
-                <strong className="text-[#183B4E]">Frontend & UI:</strong> Next.js (App Router),
-                React, TypeScript, Tailwind CSS, HeroUI.
-              </div>
-              <div>
-                <strong className="text-[#183B4E]">AI & Tooling:</strong> LLM Integration, RAG
-                Pipelines, Stockfish WASM, Git, Docker, Pytest.
-              </div>
-              <div>
-                <strong className="text-[#183B4E]">Quy chuẩn chất lượng:</strong> End-to-End
-                Testing, Code Review, Responsive, Đa ngôn ngữ (i18n).
-              </div>
+              {skillCategories.map((category) => (
+                <div key={category.title}>
+                  <strong className="text-[#183B4E]">{category.title}:</strong> {category.skills.join(", ")}.
+                </div>
+              ))}
+              <div><strong className="text-[#183B4E]">AI:</strong> RAG, LangGraph, Function Calling/MCP, LoRA/QLoRA.</div>
             </div>
           </section>
         </div>

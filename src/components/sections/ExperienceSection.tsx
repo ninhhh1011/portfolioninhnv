@@ -1,72 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Briefcase, Calendar, CheckCircle2, Activity, Radio, Compass, Gauge, Trophy, Zap } from "lucide-react";
+import React from "react";
+import { Briefcase, Calendar, CheckCircle2 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Chip } from "@/components/ui/Chip";
 import { portfolioData, ExperienceItem } from "@/content/portfolio";
 import { SectionReveal } from "@/components/ui/SectionReveal";
 import { SpotlightSurface } from "@/components/ui/SpotlightSurface";
 import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
-import { useDocumentVisibility } from "@/hooks/useDocumentVisibility";
-
-const PIPELINE_STEPS = [
-  {
-    step: 1,
-    id: "gps",
-    title: "GPS Ping",
-    desc: "Nhận tọa độ xe realtime",
-    detail: "lat/lon · 60s ping",
-    metric: "100% sync",
-    icon: Radio,
-  },
-  {
-    step: 2,
-    id: "match",
-    title: "Map Matching",
-    desc: "Khớp lưới đường PostGIS",
-    detail: "OSRM nearest line",
-    metric: "99.4% match",
-    icon: Compass,
-  },
-  {
-    step: 3,
-    id: "detour",
-    title: "Detour & ETA",
-    desc: "Tính lộ trình phụ trội",
-    detail: "+2.4km · 6 phút ETA",
-    metric: "< 80ms query",
-    icon: Gauge,
-  },
-  {
-    step: 4,
-    id: "ranking",
-    title: "Station Ranking",
-    desc: "Lọc & xếp hạng tối ưu",
-    detail: "Pin & khoảng cách",
-    metric: "Rank #1 top pick",
-    icon: Trophy,
-  },
-];
+import { VinSystemDiagram } from "@/components/visuals/VinSystemDiagram";
 
 export const ExperienceSection: React.FC = () => {
   const { experience } = portfolioData;
   const prefersReduced = useReducedMotionSafe();
-  const isDocVisible = useDocumentVisibility();
-
-  // 4-step sequential lighting pipeline: cycles 0 -> 1 -> 2 -> 3 every 2 seconds
-  const [pipelineStep, setPipelineStep] = useState(0);
-
-  useEffect(() => {
-    if (prefersReduced || !isDocVisible) return;
-
-    const interval = setInterval(() => {
-      setPipelineStep((prev) => (prev + 1) % 4);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [prefersReduced, isDocVisible]);
-
   return (
     <section id="experience" className="py-20 md:py-28 px-4 max-w-5xl mx-auto relative overflow-hidden">
       {/* Anchor alias */}
@@ -151,111 +97,12 @@ export const ExperienceSection: React.FC = () => {
 
                     <p className="text-sm md:text-base font-semibold text-[#176B87] mt-1 flex items-center gap-2">
                       <span>{exp.role}</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#176B87]" />
-                      <span className="text-xs font-mono font-normal text-[#526779]">VinUni AI Research</span>
+                      {exp.brand && <><span className="w-1.5 h-1.5 rounded-full bg-[#176B87]" /><span className="text-xs font-mono font-normal text-[#526779]">{exp.brand}</span></>}
                     </p>
                   </CardHeader>
 
                   <CardContent>
-                    {/* SƠ ĐỒ PIPELINE 4 BƯỚC CÓ ĐÈN TÍN HIỆU TUẦN TỰ & CYBER CIRCUIT (VinSmartFuture) */}
-                    {isVinSmartFuture && (
-                      <div className="mb-6 p-4 rounded-2xl bg-gradient-to-br from-[#F3F8FA] via-white to-[#F0F7F9] border border-[rgba(23,107,135,0.25)] shadow-xs relative overflow-hidden">
-                        {/* Background subtle circuit grid lines */}
-                        <div
-                          className="absolute inset-0 opacity-[0.04] pointer-events-none"
-                          style={{
-                            backgroundImage: "linear-gradient(#176B87 1px, transparent 1px), linear-gradient(90deg, #176B87 1px, transparent 1px)",
-                            backgroundSize: "20px 20px",
-                          }}
-                        />
-
-                        <div className="flex items-center justify-between mb-3 pb-2 border-b border-[rgba(23,107,135,0.12)] relative z-10">
-                          <div className="flex items-center gap-1.5">
-                            <Zap className="w-4 h-4 text-[#176B87] animate-pulse" />
-                            <h4 className="text-xs md:text-sm font-bold font-serif text-[#183B4E]">
-                              Kiến trúc Data Pipeline định tuyến trạm sạc
-                            </h4>
-                          </div>
-                          <span className="font-mono text-[10px] text-[#176B87] bg-white/90 px-2.5 py-0.5 rounded-full border border-[rgba(23,107,135,0.2)] flex items-center gap-1.5 shadow-2xs">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-ping" />
-                            <span>Vòng quét realtime · 2.0s</span>
-                          </span>
-                        </div>
-
-                        {/* 4 sequential steps with interactive cyber glow */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 relative z-10">
-                          {PIPELINE_STEPS.map((pipe, idx) => {
-                            const isActive = pipelineStep === idx;
-                            const IconComponent = pipe.icon;
-
-                            return (
-                              <div
-                                key={pipe.id}
-                                className={`relative p-3 rounded-xl border text-left transition-all duration-400 flex flex-col justify-between ${
-                                  isActive
-                                    ? "bg-white border-[#176B87] shadow-[0_6px_22px_rgba(23,107,135,0.22)] scale-[1.03] ring-2 ring-[#176B87]/30 z-10"
-                                    : "bg-white/70 border-gray-200/90 opacity-75 hover:opacity-100"
-                                }`}
-                              >
-                                <div>
-                                  {/* Step header with signal light indicator */}
-                                  <div className="flex items-center justify-between mb-1.5">
-                                    <span
-                                      className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded transition-colors ${
-                                        isActive
-                                          ? "bg-[#176B87] text-white shadow-2xs"
-                                          : "bg-gray-100 text-[#526779]"
-                                      }`}
-                                    >
-                                      0{pipe.step}
-                                    </span>
-
-                                    {/* Sequential Signal Pulse Light */}
-                                    <div className="flex items-center gap-1">
-                                      {isActive && (
-                                        <span className="relative flex h-2.5 w-2.5">
-                                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75" />
-                                          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#10B981]" />
-                                        </span>
-                                      )}
-                                      {!isActive && (
-                                        <span className="w-2 h-2 rounded-full bg-gray-300" />
-                                      )}
-                                    </div>
-                                  </div>
-
-                                  <div className="flex items-center gap-1.5 mt-1">
-                                    <IconComponent
-                                      className={`w-3.5 h-3.5 transition-colors ${
-                                        isActive ? "text-[#176B87]" : "text-[#526779]"
-                                      }`}
-                                    />
-                                    <span
-                                      className={`text-xs font-bold transition-colors ${
-                                        isActive ? "text-[#183B4E]" : "text-[#526779]"
-                                      }`}
-                                    >
-                                      {pipe.title}
-                                    </span>
-                                  </div>
-
-                                  <p className="text-[11px] text-[#526779] mt-1 leading-snug">
-                                    {pipe.desc}
-                                  </p>
-                                </div>
-
-                                <div className="mt-2.5 pt-1.5 border-t border-gray-100/90 flex items-center justify-between font-mono text-[9.5px]">
-                                  <span className="text-[#526779]">{pipe.detail}</span>
-                                  <span className={`font-bold ${isActive ? "text-[#10B981]" : "text-[#176B87]"}`}>
-                                    {pipe.metric}
-                                  </span>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
+                    {isVinSmartFuture && <VinSystemDiagram />}
 
                     {/* Bullet points */}
                     <ul className="space-y-3 mb-6">

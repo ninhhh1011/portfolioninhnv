@@ -33,7 +33,7 @@ export const SmartParkingIllustration: React.FC = () => {
             <span className="w-2.5 h-2.5 rounded-full bg-[#81C784]" />
           </div>
           <span className="text-[11px] font-mono text-[#526779] ml-2 bg-white px-2.5 py-0.5 rounded-full border border-[rgba(66,126,138,0.15)] shadow-2xs">
-            smart-parking-coral.vercel.app
+            SmartParking · minh họa
           </span>
         </div>
         <div className="flex items-center gap-2">

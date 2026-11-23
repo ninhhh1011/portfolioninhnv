@@ -11,7 +11,7 @@ const CODE_LINES = [
   "INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)",
   "GET /api/v1/stations/recommend?lat=21.0285&lon=105.8542 HTTP/1.1 200 OK",
   "candidate_search(lat=21.0285, lon=105.8542, radius_m=3500) -> 14 stations found",
-  "OSRM.calculate_route(origin=driver, waypoint=station_062, destination=target)",
+  "GraphHopper.calculate_route(origin=driver, waypoint=station_062, destination=target)",
   "detour_distance: +2.4km | arrival_eta: 6 min | battery_required: 18%",
   "git status --short",
   "M  src/routing/map_matcher.py",

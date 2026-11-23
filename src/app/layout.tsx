@@ -17,12 +17,13 @@ const plusJakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "Nguyễn Văn Ninh — Software Engineering Student | Portfolio",
   description:
-    "Portfolio cá nhân của Nguyễn Văn Ninh — sinh viên Kỹ thuật Phần mềm, xây dựng backend, ứng dụng AI và giao diện web.",
+    "Portfolio cá nhân của Nguyễn Văn Ninh — sinh viên Kỹ thuật Phần mềm, xây dựng ứng dụng fullstack, backend và AI.",
   keywords: [
     "Nguyễn Văn Ninh",
     "Portfolio",
     "Software Engineer",
     "Backend",
+    "Fullstack",
     "AI Applications",
     "Frontend",
     "Next.js",

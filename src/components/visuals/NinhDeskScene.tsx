@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import Image from "next/image";
 import { Lightbulb, X, MessageSquare } from "lucide-react";
 import { usePointerParallax } from "@/hooks/usePointerParallax";
 import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
 import { useSectionInView } from "@/hooks/useSectionInView";
 import { usePortfolioInteraction } from "@/context/PortfolioInteractionContext";
+import Character2D from "./CharacterScene/Character2D";
+
 
 export interface NinhDeskSceneProps {
   isExploreHovered?: boolean;
@@ -96,7 +97,7 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
       case "chess":
         return ["React", "Stockfish", "Supabase"];
       case "green-sm":
-        return ["FastAPI", "PostGIS", "OSRM", "Python"];
+        return ["FastAPI", "PostGIS", "GraphHopper", "Python"];
       default:
         return ["Backend & AI"];
     }
@@ -139,9 +140,7 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
 
       {/* 2. Dynamic 3D Parallax Island Container */}
       <div
-        className={`relative w-full transition-all duration-300 ease-out ${
-          prefersReduced ? "" : "float-card-1"
-        } ${isExploreHovered ? "-translate-y-2.5 scale-[1.015]" : ""}`}
+        className={`relative w-full transition-all duration-300 ease-out ${isExploreHovered ? "-translate-y-2.5 scale-[1.015]" : ""}`}
         style={{
           transform: prefersReduced
             ? undefined
@@ -181,9 +180,7 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
 
         {/* 3. VISUAL ASSET LAYER (With organic breathing animation) */}
         <div
-          className={`relative aspect-[4/3] w-full overflow-visible rounded-2xl ${
-            prefersReduced ? "" : "anim-chibi-breathe"
-          }`}
+          className="relative aspect-[4/3] w-full overflow-visible rounded-2xl"
         >
           {/* Clickable & Hoverable Chibi Character Target: Hover changes color (Focus Mode), Click triggers/advances speech bubble & waves hello */}
           <button
@@ -192,62 +189,13 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
             onMouseLeave={() => setFocusMode(false)}
             onFocus={() => setFocusMode(true)}
             onBlur={() => setFocusMode(false)}
-            aria-label="Nhân vật Ninh: Rê chuột để đổi màu/bật Focus Mode, Bấm để vẫy tay chào và trò chuyện"
+          aria-label="Nhân vật Ninh: Bấm để trò chuyện"
             className="absolute top-[14%] left-[28%] w-[38%] h-[60%] z-20 cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#176B87] group/char"
           >
             <span className="sr-only">Rê chuột đổi màu đèn/Focus Mode, bấm để trò chuyện</span>
           </button>
 
-          {/* 3.1 GREETING POSE: Waving hand, fluffy hair, warm bright smile looking at viewer */}
-          <Image
-            src="/visuals/ninh-desk-wave.png"
-            alt="Nguyễn Văn Ninh vẫy tay chào và cười thân thiện với mái tóc bồng bềnh"
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 560px, 620px"
-            priority
-            className={`object-contain pointer-events-none transition-opacity duration-700 ease-in-out ${
-              showGreeting ? "opacity-100 z-1" : "opacity-0 pointer-events-none"
-            } ${
-              focusMode
-                ? "drop-shadow-[0_16px_36px_rgba(245,158,11,0.35)] brightness-[1.04]"
-                : "drop-shadow-[0_12px_28px_rgba(24,59,78,0.08)]"
-            }`}
-          />
-
-          {/* 3.2 FOCUS CODING POSE: Hands on laptop keyboard, focusing on work */}
-          <Image
-            src="/visuals/ninh-desk.png"
-            alt="Nguyễn Văn Ninh tập trung gõ code tại bàn làm việc"
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 560px, 620px"
-            priority
-            className={`object-contain pointer-events-none transition-opacity duration-700 ease-in-out ${
-              !showGreeting ? "opacity-100 z-1" : "opacity-0 pointer-events-none"
-            } ${
-              focusMode
-                ? "drop-shadow-[0_16px_36px_rgba(245,158,11,0.35)] brightness-[1.04]"
-                : "drop-shadow-[0_12px_28px_rgba(24,59,78,0.08)]"
-            }`}
-          />
-
-          {/* SMILE SPARKLES ACCENT: Radiant warm smile when greeting */}
-          {showGreeting && !prefersReduced && (
-            <div className="absolute top-[17%] left-[45%] pointer-events-none z-20 select-none" aria-hidden="true">
-              <span className="absolute -top-1 -right-4 text-[13px] anim-sparkle text-amber-400">✨</span>
-              <span className="absolute top-5 -left-3 text-[11px] anim-sparkle text-sky-400" style={{ animationDelay: "0.6s" }}>✨</span>
-            </div>
-          )}
-
-          {/* WAVING HAND MINI BADGE: Highlights the waving hand hello gesture */}
-          {showGreeting && (
-            <div className="absolute top-[11%] left-[22%] pointer-events-none z-20 animate-[heroFadeUp_0.4s_ease-out]">
-              <span className="px-2 py-0.5 rounded-full text-[9.5px] font-medium bg-white/95 text-[#183B4E] border border-[rgba(23,107,135,0.22)] shadow-xs flex items-center gap-1">
-                <span className="anim-wave-hand text-xs">👋</span>
-                <span>Xin chào!</span>
-              </span>
-            </div>
-          )}
-
+          <Character2D focusMode={focusMode} greeting={showGreeting} />
           {/* DYNAMIC LIGHT REFLECTION ONTO CHARACTER: Bounces screen/ambient glow onto chest & face */}
           <div
             className="absolute top-[20%] left-[36%] w-28 h-28 rounded-full pointer-events-none transition-all duration-700 mix-blend-soft-light z-15"
@@ -441,7 +389,7 @@ export const NinhDeskScene: React.FC<NinhDeskSceneProps> = ({
               <div className="flex-1">
                 <span className="leading-snug block font-medium">{speechBubble.message}</span>
                 <span className="text-[9px] text-[#526779] block mt-0.5">
-                  Bấm nhân vật để vẫy chào & xem tiếp ({speechBubble.step + 1}/4)
+                  Bấm nhân vật để xem tiếp ({speechBubble.step + 1}/4)
                 </span>
               </div>
               <button

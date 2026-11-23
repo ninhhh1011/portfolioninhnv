@@ -21,10 +21,10 @@ export const ProjectsSection: React.FC = () => {
             Sản phẩm tiêu biểu
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#183B4E] mt-4 mb-3 tracking-tight">
-            Vòng quay ngựa gỗ 3D
+            Dự án tiêu biểu
           </h2>
           <p className="text-sm md:text-base text-[#526779] leading-relaxed">
-            Các dự án công nghệ hoàn chỉnh được trình diễn sinh động dọc theo quỹ đạo vòm parabol 3D hướng lên, tối ưu trải nghiệm tương tác trực quan.
+            Khám phá những sản phẩm mình xây dựng, từ trợ lý học vụ và công cụ trực quan hóa đến trải nghiệm web tương tác.
           </p>
         </div>
       </SectionReveal>

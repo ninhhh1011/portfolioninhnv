@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { ProjectItem } from "@/content/portfolio";
 import { ProjectCard } from "./ProjectCard";
 import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
+import { useSectionInView } from "@/hooks/useSectionInView";
+import { useDocumentVisibility } from "@/hooks/useDocumentVisibility";
 
 interface ParabolicCarousel3DProps {
   projects: ProjectItem[];
@@ -16,12 +17,16 @@ export const ParabolicCarousel3D: React.FC<ParabolicCarousel3DProps> = ({ projec
   const count = items.length;
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
+  const [interacted, setInteracted] = useState(false);
+  const [hasFocus, setHasFocus] = useState(false);
   const prefersReduced = useReducedMotionSafe();
+  const visible = useDocumentVisibility();
+  const { ref, isInView } = useSectionInView<HTMLDivElement>({ triggerOnce: false, rootMargin: "0px" });
 
   const dragStartXRef = useRef<number | null>(null);
   const isDraggingRef = useRef(false);
+  const draggedRef = useRef(false);
 
   const next = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % count);
@@ -31,17 +36,25 @@ export const ParabolicCarousel3D: React.FC<ParabolicCarousel3DProps> = ({ projec
     setActiveIndex((prev) => (prev - 1 + count) % count);
   }, [count]);
 
-  // Autoplay with pause on hover
   useEffect(() => {
-    if (!isPlaying || isHovered || prefersReduced) return;
-    const timer = setInterval(next, 5000);
+    if (!isInView) setInteracted(false);
+  }, [isInView]);
+
+  useEffect(() => {
+    if (!isInView || !visible || isHovered || hasFocus || interacted || prefersReduced || count < 2) return;
+    const timer = setInterval(() => {
+      if (!document.querySelector('[role="dialog"]')) next();
+    }, 5000);
     return () => clearInterval(timer);
-  }, [isPlaying, isHovered, next, prefersReduced]);
+  }, [isInView, visible, isHovered, hasFocus, interacted, next, prefersReduced, count]);
 
   // Pointer drag gestures
   const onPointerDown = (e: React.PointerEvent) => {
+    setInteracted(true);
+    if ((e.target as HTMLElement).closest("button, a")) return;
     dragStartXRef.current = e.clientX;
     isDraggingRef.current = true;
+    draggedRef.current = false;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
@@ -49,6 +62,7 @@ export const ParabolicCarousel3D: React.FC<ParabolicCarousel3DProps> = ({ projec
     if (!isDraggingRef.current || dragStartXRef.current === null) return;
     const diff = e.clientX - dragStartXRef.current;
     if (Math.abs(diff) > 40) {
+      draggedRef.current = true;
       if (diff > 0) prev();
       else next();
     }
@@ -57,29 +71,49 @@ export const ParabolicCarousel3D: React.FC<ParabolicCarousel3DProps> = ({ projec
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowLeft") prev();
-    if (e.key === "ArrowRight") next();
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      e.preventDefault();
+      setInteracted(true);
+      if (e.key === "ArrowLeft") prev();
+      else next();
+    }
   };
 
   return (
     <div
+      ref={ref}
       className="relative w-full py-4 select-none overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={() => { setIsHovered(false); setInteracted(false); }}
+      onFocus={() => setHasFocus(true)}
+      onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setHasFocus(false); }}
       onKeyDown={onKeyDown}
       tabIndex={0}
       role="region"
-      aria-label="Vòng quay ngựa gỗ Parabol 3D"
+      aria-label="Dự án tiêu biểu"
     >
       {/* 3D Scene Viewport */}
       <div
-        className="relative mx-auto h-[600px] sm:h-[560px] md:h-[530px] w-full max-w-6xl flex items-center justify-center cursor-grab active:cursor-grabbing"
+        data-carousel-scene
+        className="relative mx-auto h-[720px] sm:h-[640px] md:h-[530px] w-full max-w-6xl flex items-center justify-center cursor-grab active:cursor-grabbing"
         style={{
           perspective: "1400px",
           transformStyle: "preserve-3d",
+          touchAction: "pan-y",
         }}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
+        onPointerCancel={() => { isDraggingRef.current = false; dragStartXRef.current = null; }}
+        onClickCapture={(e) => {
+          if (draggedRef.current) { e.preventDefault(); e.stopPropagation(); draggedRef.current = false; }
+        }}
+        onClick={(e) => {
+          if ((e.target as HTMLElement).closest("button, a")) return;
+          const rect = e.currentTarget.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          if (x < rect.width * 0.15) prev();
+          else if (x > rect.width * 0.85) next();
+        }}
       >
         {/* Luminous Parabolic Guide Curve Path (SVG) */}
         <svg
@@ -134,8 +168,8 @@ export const ParabolicCarousel3D: React.FC<ParabolicCarousel3DProps> = ({ projec
           return (
             <div
               key={`${project.id}-${idx}`}
-              onClick={() => {
-                if (!isCenter) setActiveIndex(idx);
+              onClick={(e) => {
+                if (!isCenter) { e.stopPropagation(); setActiveIndex(idx); }
               }}
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[88vw] sm:max-w-[700px] md:max-w-[800px] transition-all duration-700 ease-[cubic-bezier(0.2,0.85,0.25,1)]"
               style={{
@@ -155,36 +189,16 @@ export const ParabolicCarousel3D: React.FC<ParabolicCarousel3DProps> = ({ projec
         })}
       </div>
 
-      {/* Parabolic Carousel Controls & Indicator Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 max-w-2xl mx-auto mt-6 px-4">
-        {/* Navigation Step Buttons */}
+      <div className="flex items-center justify-center mt-6 px-4">
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={prev}
-            aria-label="Dự án trước"
-            className="p-2.5 rounded-full bg-white/90 hover:bg-white border border-[rgba(23,107,135,0.2)] text-[#176B87] hover:text-[#183B4E] shadow-sm hover:scale-105 active:scale-95 transition-all cursor-pointer"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            type="button"
-            onClick={next}
-            aria-label="Dự án tiếp theo"
-            className="p-2.5 rounded-full bg-white/90 hover:bg-white border border-[rgba(23,107,135,0.2)] text-[#176B87] hover:text-[#183B4E] shadow-sm hover:scale-105 active:scale-95 transition-all cursor-pointer"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Parabolic Position Indicators */}
-        <div className="flex items-center gap-2">
-          {items.map((_, i) => (
+          {items.map((project, i) => (
             <button
               key={i}
               type="button"
-              onClick={() => setActiveIndex(i)}
-              aria-label={`Chuyển đến vị trí ${i + 1}`}
+              id={`project-choice-${project.id}`}
+              aria-current={activeIndex === i ? "true" : undefined}
+              onClick={() => { setInteracted(true); setActiveIndex(i); }}
+              aria-label={`Xem dự án ${project.title}`}
               className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                 activeIndex === i
                   ? "w-8 bg-[#176B87] shadow-xs"
@@ -194,24 +208,6 @@ export const ParabolicCarousel3D: React.FC<ParabolicCarousel3DProps> = ({ projec
           ))}
         </div>
 
-        {/* Autoplay Toggle */}
-        <button
-          type="button"
-          onClick={() => setIsPlaying((p) => !p)}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/85 hover:bg-white border border-[rgba(23,107,135,0.2)] text-xs font-medium text-[#183B4E] transition-all cursor-pointer"
-        >
-          {isPlaying ? (
-            <>
-              <Pause className="w-3.5 h-3.5 text-[#176B87]" />
-              <span>Tự trượt Parabol</span>
-            </>
-          ) : (
-            <>
-              <Play className="w-3.5 h-3.5 text-[#176B87]" />
-              <span>Dừng</span>
-            </>
-          )}
-        </button>
       </div>
     </div>
   );

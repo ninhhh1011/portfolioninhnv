@@ -145,7 +145,7 @@ export const ChessIllustration: React.FC = () => {
           >
             <div className="flex items-center gap-1.5 font-bold text-[#553C9A] mb-1">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Trợ lý RAG phân tích:</span>
+              <span>AI Coach phân tích:</span>
             </div>
             <p className="text-[#183B4E] text-[11px] leading-relaxed">
               {step >= 2 ? (
@@ -168,7 +168,7 @@ export const ChessIllustration: React.FC = () => {
               Stockfish WASM
             </span>
             <span>·</span>
-            <span>Vector RAG Coach</span>
+            <span>AI Coach</span>
             <span>·</span>
             <span>Supabase History</span>
           </div>
